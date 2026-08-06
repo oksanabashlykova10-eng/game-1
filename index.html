@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Три в ряд</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh; margin: 0; display: grid; place-items: center;
+      background: radial-gradient(circle at top, #4338ca, #16142b 55%, #090914);
+      color: #fff; user-select: none;
+    }
+    .game { width: min(94vw, 580px); text-align: center; }
+    h1 { margin: 0 0 8px; font-size: clamp(32px, 8vw, 54px); }
+    .hint { margin: 0 0 20px; color: #c7d2fe; }
+    .panel { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .stat, button {
+      border: 1px solid #ffffff2c; border-radius: 16px; background: #ffffff12;
+      box-shadow: inset 0 1px #ffffff20, 0 8px 24px #0004;
+    }
+    .stat { flex: 1; padding: 10px; font-size: 14px; color: #cbd5e1; }
+    .stat strong { display: block; color: white; font-size: 25px; }
+    #board {
+      display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
+      padding: 10px; border-radius: 22px; background: #08081680;
+      box-shadow: 0 20px 55px #0008; touch-action: none;
+    }
+    .cell {
+      aspect-ratio: 1; border: 0; border-radius: 17%; cursor: pointer;
+      display: grid; place-items: center; font-size: clamp(22px, 7vw, 43px);
+      background: #ffffff0b; transition: transform .14s, background .14s, opacity .2s;
+      filter: drop-shadow(0 5px 4px #0005);
+    }
+    .cell:hover { transform: translateY(-2px); background: #ffffff16; }
+    .cell.selected { outline: 3px solid #fff; transform: scale(.9); background: #ffffff26; }
+    .cell.matched { animation: pop .25s ease both; }
+    @keyframes pop { to { transform: scale(1.35); opacity: 0; } }
+    #message { height: 28px; margin: 13px 0 5px; color: #fde68a; font-weight: 700; }
+    button { color: white; padding: 11px 18px; cursor: pointer; font-weight: 700; }
+    button:hover { background: #ffffff20; }
+    @media (max-width: 430px) { #board { gap: 4px; padding: 7px; } }
+  </style>
+</head>
+<body>
+  <main class="game">
+    <h1>Три в ряд</h1>
+    <p class="hint">Меняйте соседние фишки и собирайте линии из трёх и более</p>
+    <div class="panel">
+      <div class="stat">Счёт<strong id="score">0</strong></div>
+      <div class="stat">Ходы<strong id="moves">30</strong></div>
+      <div class="stat">Рекорд<strong id="best">0</strong></div>
+    </div>
+    <div id="board" aria-label="Игровое поле"></div>
+    <div id="message"></div>
+    <button id="restart">Новая игра</button>
+  </main>
+
+  <script>
+    const SIZE = 8;
+    const ICONS = ['??', '??', '??', '??', '??', '??'];
+    const boardEl = document.querySelector('#board');
+    const scoreEl = document.querySelector('#score');
+    const movesEl = document.querySelector('#moves');
+    const bestEl = document.querySelector('#best');
+    const messageEl = document.querySelector('#message');
+    let board = [], selected = null, score = 0, moves = 30, busy = false;
+
+    const randomIcon = () => ICONS[Math.floor(Math.random() * ICONS.length)];
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    function createBoard() {
+      board = Array.from({ length: SIZE }, () => Array(SIZE).fill(''));
+      for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) {
+        do board[r][c] = randomIcon();
+        while ((c > 1 && board[r][c] === board[r][c-1] && board[r][c] === board[r][c-2]) ||
+               (r > 1 && board[r][c] === board[r-1][c] && board[r][c] === board[r-2][c]));
+      }
+    }
+
+    function render(matches = new Set()) {
+      boardEl.innerHTML = '';
+      board.forEach((row, r) => row.forEach((icon, c) => {
+        const cell = document.createElement('button');
+        cell.className = 'cell';
+        cell.textContent = icon;
+        cell.setAttribute('aria-label', `Фишка ${icon}, строка ${r+1}, столбец ${c+1}`);
+        if (selected?.r === r && selected?.c === c) cell.classList.add('selected');
+        if (matches.has(`${r},${c}`)) cell.classList.add('matched');
+        cell.onclick = () => choose(r, c);
+        boardEl.append(cell);
+      }));
+      scoreEl.textContent = score;
+      movesEl.textContent = moves;
+      bestEl.textContent = localStorage.getItem('match3-best') || 0;
+    }
+
+    function findMatches() {
+      const found = new Set();
+      for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) {
+        if (c < SIZE-2 && board[r][c] && board[r][c] === board[r][c+1] && board[r][c] === board[r][c+2]) {
+          let x = c; while (x < SIZE && board[r][x] === board[r][c]) found.add(`${r},${x++}`);
+        }
+        if (r < SIZE-2 && board[r][c] && board[r][c] === board[r+1][c] && board[r][c] === board[r+2][c]) {
+          let y = r; while (y < SIZE && board[y][c] === board[r][c]) found.add(`${y++},${c}`);
+        }
+      }
+      return found;
+    }
+
+    function swap(a, b) { [board[a.r][a.c], board[b.r][b.c]] = [board[b.r][b.c], board[a.r][a.c]]; }
+    const adjacent = (a, b) => Math.abs(a.r-b.r) + Math.abs(a.c-b.c) === 1;
+
+    async function choose(r, c) {
+      if (busy || moves <= 0) return;
+      const current = { r, c };
+      if (!selected) { selected = current; render(); return; }
+      if (selected.r === r && selected.c === c) { selected = null; render(); return; }
+      if (!adjacent(selected, current)) { selected = current; render(); return; }
+
+      busy = true;
+      const previous = selected; selected = null;
+      swap(previous, current); render(); await wait(180);
+      if (!findMatches().size) {
+        swap(previous, current); messageEl.textContent = 'Этот ход не создаёт комбинацию'; render();
+        await wait(700); messageEl.textContent = ''; busy = false; return;
+      }
+      moves--; await resolveBoard();
+      if (moves <= 0) finish();
+      busy = false;
+    }
+
+    async function resolveBoard() {
+      let combo = 0, matches;
+      while ((matches = findMatches()).size) {
+        combo++;
+        score += matches.size * 10 * combo;
+        messageEl.textContent = combo > 1 ? `Комбо ?${combo}!` : `+${matches.size * 10}`;
+        render(matches); await wait(260);
+        matches.forEach(key => { const [r,c] = key.split(',').map(Number); board[r][c] = ''; });
+        for (let c = 0; c < SIZE; c++) {
+          const column = [];
+          for (let r = SIZE-1; r >= 0; r--) if (board[r][c]) column.push(board[r][c]);
+          for (let r = SIZE-1, i = 0; r >= 0; r--, i++) board[r][c] = column[i] || randomIcon();
+        }
+        render(); await wait(240);
+      }
+      messageEl.textContent = '';
+    }
+
+    function finish() {
+      const best = Math.max(score, Number(localStorage.getItem('match3-best') || 0));
+      localStorage.setItem('match3-best', best);
+      messageEl.textContent = `Игра окончена! Результат: ${score}`;
+      render();
+    }
+
+    function start() {
+      score = 0; moves = 30; selected = null; busy = false; messageEl.textContent = '';
+      createBoard(); render();
+    }
+
+    document.querySelector('#restart').onclick = start;
+    start();
+  </script>
+</body>
+</html>
+
