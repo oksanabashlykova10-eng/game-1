@@ -1,316 +1,0 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff7e9">
-  <title>Little English Adventures</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap');
-    :root{--ink:#30224c;--violet:#7846d8;--coral:#ff786d;--mint:#9ed98e;--sun:#ffc857;--paper:#fffaf0;--shadow:0 18px 45px #4a2f7030}
-    *{box-sizing:border-box} body{margin:0;color:var(--ink);font-family:Nunito,system-ui,sans-serif;background:#fff7e9;min-height:100vh} button{font:inherit}
-    .sky{position:fixed;inset:0;z-index:-1;background:linear-gradient(#170d2a99,#27133d80),url('assets/library-background.png') center top/cover fixed}
-    .sky:after{content:'âœ¦  Â·  âœ§  Â·  âœ¦';position:absolute;top:130px;left:5%;right:5%;font-size:36px;letter-spacing:8vw;color:#ffffffaa;white-space:nowrap;overflow:hidden}
-    header{max-width:1240px;margin:20px auto 0;padding:0 22px}.nav{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#fffdf7eF;border:2px solid #fff;border-radius:28px;padding:12px 18px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}
-    .brand{display:flex;align-items:center;gap:11px;font-family:'Baloo 2';font-weight:800;font-size:21px}.brand-badge{display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:linear-gradient(145deg,#ffcf5d,#ff8d72);font-size:28px;transform:rotate(-4deg)}
-    .nav-note{padding:10px 16px;border-radius:15px;background:#f3ebff;color:#6940b0;font-weight:800}.hero{max-width:1050px;margin:54px auto 34px;padding:0 22px;text-align:center}.eyebrow{display:inline-block;padding:8px 16px;background:white;border-radius:999px;color:#8052c9;font-weight:800;box-shadow:0 8px 24px #6b499120}
-    h1{font-family:'Baloo 2';font-size:clamp(44px,8vw,86px);line-height:.92;margin:20px 0 12px;letter-spacing:-2px}.rainbow{background:linear-gradient(90deg,#ff715f,#eea82f,#77a93c,#4c9ccc,#8b50d7);-webkit-background-clip:text;color:transparent}.hero p{font-size:clamp(18px,2.5vw,24px);margin:0;color:#675879}
-    main{max-width:1240px;margin:auto;padding:0 22px 70px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.card{background:var(--paper);border:3px solid white;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);transition:.25s;position:relative}.card:hover{transform:translateY(-7px) rotate(.3deg);box-shadow:0 24px 55px #4a2f7040}.card-image{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border:0;cursor:pointer;background:#e8dbff}.card-image:focus-visible{outline:6px solid #ffcf5d;outline-offset:-6px}.card-body{padding:20px 22px 22px}.number{position:absolute;top:14px;left:14px;background:#fff9;color:#7140c5;border:2px solid white;padding:7px 11px;border-radius:999px;font-weight:900;backdrop-filter:blur(8px)}
-    h2{font-family:'Baloo 2';font-size:30px;line-height:1;margin:0 0 8px}.card p{margin:0 0 15px;line-height:1.45;color:#6c6079}.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{font-size:12px;font-weight:900;border-radius:999px;padding:6px 9px;background:#ece3ff;color:#7049ab}.tag:nth-child(2){background:#ffe7b3;color:#8b5b0c}.tag:nth-child(3){background:#dff1d6;color:#477637}
-    .play{margin-top:16px;width:100%;border:0;border-radius:16px;padding:12px;color:white;background:linear-gradient(135deg,#8a58e3,#6634bd);box-shadow:0 8px 0 #4e268e;font-weight:900;cursor:pointer}.play:active{transform:translateY(5px);box-shadow:0 3px 0 #4e268e}
-    .journey{margin-top:44px;background:#fffdf7;border:3px solid white;border-radius:32px;padding:28px;box-shadow:var(--shadow)}.journey-head{display:flex;justify-content:space-between;align-items:end;gap:12px}.journey h2{font-size:32px}.journey p{margin:4px 0 0;color:#776983}.stars-count{white-space:nowrap;background:#fff0c5;padding:9px 14px;border-radius:999px;font-weight:900;color:#936000}
-    .trail{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:26px}.trail:before{content:'';position:absolute;left:15%;right:15%;top:35px;border-top:5px dashed #d7c4a2}.milestone{text-align:center;position:relative}.badge{width:74px;height:74px;margin:auto;display:grid;place-items:center;border-radius:50%;background:#e5ddd0;border:6px solid #fff;box-shadow:0 7px 18px #5a416428;font-size:31px;filter:grayscale(1);transition:.35s}.milestone.done .badge{background:linear-gradient(145deg,#ffd766,#ff986c);filter:none;transform:scale(1.07) rotate(-5deg)}.milestone strong{display:block;margin-top:9px}.milestone small{color:#84768d}.milestone.done small{color:#5d8b42;font-weight:900}
-    dialog{border:0;padding:0;border-radius:30px;width:min(94vw,760px);max-height:92vh;background:#fffaf0;color:var(--ink);box-shadow:0 30px 100px #26163f88}dialog::backdrop{background:#201330b8;backdrop-filter:blur(8px)}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:2px solid #eee3d5}.modal-head h2{margin:0}.close{border:0;background:#eee5f8;width:42px;height:42px;border-radius:50%;font-size:23px;cursor:pointer}.game-area{padding:20px;min-height:430px;text-align:center}.game-note{margin:0 auto 16px;color:#695c76;max-width:560px}.game-bar{display:flex;justify-content:center;gap:10px;margin-bottom:15px}.pill{background:white;border:2px solid #eadff5;padding:8px 13px;border-radius:999px;font-weight:900}
-    #match-board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;max-width:480px;margin:auto;background:#665090;padding:9px;border-radius:22px}.gem{aspect-ratio:1;border:0;border-radius:16px;background:#fff7;font-size:clamp(25px,6vw,43px);cursor:pointer;transition:.12s}.gem.selected{outline:4px solid #ffdb59;transform:scale(.88)}
-    .prompt{font-family:'Baloo 2';font-size:clamp(30px,6vw,46px);margin:8px 0 20px}.maze-task{display:inline-flex;align-items:center;gap:10px;margin:0 0 12px;padding:8px 17px;border-radius:999px;background:#fff0b8;color:#6c4510;font-size:21px;font-weight:900}.maze{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:455px;margin:auto;background:#5d427f;padding:9px;border-radius:20px;box-shadow:0 12px 26px #422c6750}.maze-cell{aspect-ratio:1;display:grid;place-items:center;border-radius:9px;background:#f7e7bc;font-size:29px}.maze-cell.wall{background:linear-gradient(#78bd61,#4c9848);box-shadow:inset 0 -5px #367536}.maze-cell.target{background:#fff8df;box-shadow:inset 0 0 0 3px #ffd76a;animation:targetGlow 1.2s ease-in-out infinite alternate}@keyframes targetGlow{to{box-shadow:inset 0 0 0 3px #ffbd49,0 0 15px #ffd65e}}.controls{display:grid;grid-template-columns:repeat(3,58px);justify-content:center;gap:6px;margin-top:15px}.arrow{height:50px;border:0;border-radius:14px;background:#8260d6;color:white;font-size:24px;font-weight:900;box-shadow:0 5px 0 #583c9e;cursor:pointer}.arrow:active{transform:translateY(3px);box-shadow:0 2px 0 #583c9e}.arrow.up{grid-column:2}.arrow.left{grid-column:1}.arrow.down{grid-column:2}.arrow.right{grid-column:3}.catch-stage{position:relative;width:min(100%,560px);height:390px;margin:auto;overflow:hidden;border:5px solid white;border-radius:24px;background:linear-gradient(#74cef5,#d9f6ff 68%,#9bd273 69%);box-shadow:inset 0 -28px #6bb750}.falling{position:absolute;top:-55px;font-size:43px;line-height:1;filter:drop-shadow(0 4px 3px #31577955)}.basket{position:absolute;bottom:12px;width:92px;height:48px;display:grid;place-items:center;font-size:55px;transition:left .06s linear}.catch-controls{display:flex;justify-content:center;gap:15px;margin-top:13px}.catch-controls button{width:100px;height:52px;border:0;border-radius:15px;background:#8260d6;color:white;font-size:26px;box-shadow:0 5px 0 #583c9e;cursor:pointer}
-    .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,120px);background:#33224e;color:white;padding:13px 20px;border-radius:999px;font-weight:900;z-index:20;transition:.3s}.toast.show{transform:translate(-50%,0)}
-    @media(max-width:850px){.cards{grid-template-columns:1fr;max-width:580px;margin:auto}.nav-note{display:none}.card-image{aspect-ratio:16/9}.hero{margin-top:40px}.trail{gap:8px}.trail:before{left:12%;right:12%}}
-    @media(max-width:520px){header,main,.hero{padding-left:12px;padding-right:12px}.brand{font-size:17px}.brand-badge{width:42px;height:42px}.journey{padding:21px 12px}.journey-head{align-items:start;flex-direction:column}.trail{font-size:13px}.badge{width:62px;height:62px}.trail:before{top:29px}.game-area{padding:15px}.animal-grid{grid-template-columns:repeat(2,1fr)}.choice{min-height:100px}.modal-head h2{font-size:25px}}
-    /* Storybook visual refresh */
-    .sky:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0 68%,#190d2d 100%)}
-    .hero{margin-top:46px}.eyebrow{background:#fff8e9;border:1px solid #f6dba7;color:#7043b4;box-shadow:0 8px 24px #0004}
-    h1{font-size:clamp(44px,8vw,78px);color:#fff4d0;text-shadow:0 5px 0 #5b2f48,0 10px 28px #000}.rainbow{background:linear-gradient(90deg,#ffc759,#ffa373,#d69cff,#a5db72);-webkit-background-clip:text;color:transparent}.hero p{display:inline-block;padding:9px 20px;border-radius:999px;background:#241333b8;color:#fff6dd}
-    .card{border-color:#ffe8b8;box-shadow:0 22px 55px #0008}.card:hover{box-shadow:0 28px 65px #0009}.card-image{background:#392154}.journey{background:#fffaf0;border-color:#ffe6b0;box-shadow:0 22px 55px #0007}
-    .maze-task{padding:10px 20px;border:0;background:linear-gradient(#ffd75b,#ffac34);color:#4f2d74;font-size:22px;box-shadow:0 6px 0 #dc8025}
-    .maze{grid-template-columns:repeat(9,1fr);gap:3px;max-width:500px;background:#643f91;border:5px solid #9d69df;border-radius:24px}.maze-cell{border-radius:8px;background:#fff2c9;font-size:0;overflow:hidden}.maze-cell.hero{font-size:31px;background:#ffe2a8}.maze-cell.wall{background:linear-gradient(#83cc5f,#4e9e42);box-shadow:inset 0 -4px #367536}.maze-cell.target{font-size:34px;background:#fffaf0;box-shadow:inset 0 0 0 2px #ffd76a}.maze-cell.target.goal{animation:targetGlow 1.2s ease-in-out infinite alternate}
-    .catch-stage{background:url('assets/catch-background.png') center/cover;box-shadow:0 12px 28px #2d53884d}.falling{top:-64px;width:62px;height:62px;display:grid;place-items:center;font-size:50px}.basket{width:96px;height:54px;font-size:60px;filter:drop-shadow(0 5px 4px #5d330966)}
-  </style>
-</head>
-<body>
-  <div class="sky"></div>
-  <header><nav class="nav"><div class="brand"><span class="brand-badge">ğŸ¦‰</span><span>Little English<br>Adventures</span></div><div class="nav-note">ğŸˆ Ğ”Ğ»Ñ Ğ´ĞµÑ‚ĞµĞ¹ 5â€“6 Ğ»ĞµÑ‚</div></nav></header>
-  <section class="hero"><span class="eyebrow">Learn â€¢ Play â€¢ Shine</span><h1>English is a <span class="rainbow">little adventure!</span></h1><p>Ğ¢Ñ€Ğ¸ ĞºĞ¾Ñ€Ğ¾Ñ‚ĞºĞ¸Ğµ Ğ¸Ğ³Ñ€Ñ‹ Ğ´Ğ»Ñ Ğ¿ĞµÑ€Ğ²Ñ‹Ñ… Ğ°Ğ½Ğ³Ğ»Ğ¸Ğ¹ÑĞºĞ¸Ñ… ÑĞ»Ğ¾Ğ²</p></section>
-  <main>
-    <section class="cards" aria-label="Ğ˜Ğ³Ñ€Ñ‹">
-      <article class="card"><span class="number">Game 1</span><img class="card-image" src="assets/match-learn.png" alt="Ğ’ĞµÑÑ‘Ğ»Ñ‹Ğµ Ñ„Ñ€ÑƒĞºÑ‚Ñ‹ Ğ² Ğ¸Ğ³Ñ€Ğµ Ñ‚Ñ€Ğ¸ Ğ² Ñ€ÑĞ´" data-open="match" tabindex="0"><div class="card-body"><h2>Match & Learn</h2><p>ĞœĞµĞ½ÑĞ¹ ÑĞ¾ÑĞµĞ´Ğ½Ğ¸Ğµ Ñ„Ñ€ÑƒĞºÑ‚Ñ‹ Ğ¼ĞµÑÑ‚Ğ°Ğ¼Ğ¸. Ğ¡Ğ¾Ğ±ĞµÑ€Ğ¸ Ñ‚Ñ€Ğ¸ Ğ¾Ğ´Ğ¸Ğ½Ğ°ĞºĞ¾Ğ²Ñ‹Ñ… â€” ÑƒÑĞ»Ñ‹ÑˆĞ¸ÑˆÑŒ Ğ¸Ñ… Ğ½Ğ°Ğ·Ğ²Ğ°Ğ½Ğ¸Ğµ Ğ¿Ğ¾-Ğ°Ğ½Ğ³Ğ»Ğ¸Ğ¹ÑĞºĞ¸!</p><div class="tags"><span class="tag">Fruits</span><span class="tag">Words</span><span class="tag">Logic</span></div><button class="play" data-open="match">Play now â†’</button></div></article>
-      <article class="card"><span class="number">Game 2</span><img class="card-image" src="assets/arrow-adventure.png" alt="Ğ¡Ğ¾Ğ²Ğ° Ğ¿Ñ€Ğ¾Ñ…Ğ¾Ğ´Ğ¸Ñ‚ Ğ»Ğ°Ğ±Ğ¸Ñ€Ğ¸Ğ½Ñ‚ Ñ Ğ¿Ğ¾Ğ¼Ğ¾Ñ‰ÑŒÑ ÑÑ‚Ñ€ĞµĞ»Ğ¾Ğº" data-open="arrows" tabindex="0"><div class="card-body"><h2>Arrow Adventure</h2><p>ĞŸĞ¾ÑĞ»ÑƒÑˆĞ°Ğ¹ Ğ°Ğ½Ğ³Ğ»Ğ¸Ğ¹ÑĞºĞ¾Ğµ ÑĞ»Ğ¾Ğ²Ğ¾ Ğ¸ Ğ¿Ñ€Ğ¾Ğ²ĞµĞ´Ğ¸ ÑĞ¾Ğ²Ñ‘Ğ½ĞºĞ° Ğº Ğ¿Ñ€Ğ°Ğ²Ğ¸Ğ»ÑŒĞ½Ğ¾Ğ¹ ĞºĞ°Ñ€Ñ‚Ğ¸Ğ½ĞºĞµ. Ğ§ĞµÑ‚Ñ‹Ñ€Ğµ Ñ€Ğ°ÑƒĞ½Ğ´Ğ° â€” Ñ‡ĞµÑ‚Ñ‹Ñ€Ğµ Ğ½Ğ¾Ğ²Ñ‹Ğµ Ñ†ĞµĞ»Ğ¸!</p><div class="tags"><span class="tag">Maze</span><span class="tag">Words</span><span class="tag">Directions</span></div><button class="play" data-open="arrows">Play now â†’</button></div></article>
-      <article class="card"><span class="number">Game 3</span><img class="card-image" src="assets/catch-words.png" alt="Ğ¡Ğ¾Ğ²Ğ° Ğ»Ğ¾Ğ²Ğ¸Ñ‚ Ğ¿Ğ°Ğ´Ğ°ÑÑ‰Ğ¸Ğµ Ğ¿Ñ€ĞµĞ´Ğ¼ĞµÑ‚Ñ‹ ĞºĞ¾Ñ€Ğ·Ğ¸Ğ½Ğ¾Ğ¹" data-open="catch" tabindex="0"><div class="card-body"><h2>Catch the Words</h2><p>Ğ”Ğ²Ğ¸Ğ³Ğ°Ğ¹ ĞºĞ¾Ñ€Ğ·Ğ¸Ğ½Ñƒ Ğ¸ Ğ»Ğ¾Ğ²Ğ¸ Ñ‚Ğ¾Ğ»ÑŒĞºĞ¾ Ñ‚Ğ¾Ñ‚ Ğ¿Ñ€ĞµĞ´Ğ¼ĞµÑ‚, ĞºĞ¾Ñ‚Ğ¾Ñ€Ñ‹Ğ¹ Ğ½Ğ°Ğ·Ğ²Ğ°Ğ½ Ğ¿Ğ¾-Ğ°Ğ½Ğ³Ğ»Ğ¸Ğ¹ÑĞºĞ¸. ĞĞµ Ğ¿Ñ€Ğ¾Ğ¼Ğ°Ñ…Ğ½Ğ¸ÑÑŒ!</p><div class="tags"><span class="tag">Arcade</span><span class="tag">Listening</span><span class="tag">Reaction</span></div><button class="play" data-open="catch">Play now â†’</button></div></article>
-    </section>
-    <section class="journey"><div class="journey-head"><div><h2>My learning trail</h2><p>Ğ˜Ğ³Ñ€Ğ°Ğ¹ Ğ¸ Ğ´Ğ²Ğ¸Ğ³Ğ°Ğ¹ÑÑ Ğ¿Ğ¾ Ğ¿ÑƒĞ½ĞºÑ‚Ğ¸Ñ€Ğ½Ğ¾Ğ¹ Ğ´Ğ¾Ñ€Ğ¾Ğ¶ĞºĞµ Ğ¾Ñ‚ Ğ´Ğ¾ÑÑ‚Ğ¸Ğ¶ĞµĞ½Ğ¸Ñ Ğº Ğ´Ğ¾ÑÑ‚Ğ¸Ğ¶ĞµĞ½Ğ¸Ñ!</p></div><div class="stars-count">â­ <span id="star-count">0</span> / 3</div></div><div class="trail"><div class="milestone" data-m="match"><div class="badge">ğŸ“</div><strong>Fruit Friend</strong><small>ĞŸÑ€Ğ¾Ğ¹Ğ´Ğ¸ Match & Learn</small></div><div class="milestone" data-m="arrows"><div class="badge">ğŸ§­</div><strong>Maze Master</strong><small>ĞŸÑ€Ğ¾Ğ¹Ğ´Ğ¸ Arrow Adventure</small></div><div class="milestone" data-m="catch"><div class="badge">ğŸ§º</div><strong>Super Catcher</strong><small>ĞŸÑ€Ğ¾Ğ¹Ğ´Ğ¸ Catch the Words</small></div></div></section>
-  </main>
-
-  <dialog id="game-modal"><div class="modal-head"><h2 id="modal-title"></h2><button class="close" aria-label="Ğ—Ğ°ĞºÑ€Ñ‹Ñ‚ÑŒ">Ã—</button></div><div class="game-area" id="game-area"></div></dialog><div class="toast" id="toast"></div>
-  <script>
-    const modal=document.querySelector('#game-modal'),area=document.querySelector('#game-area'),title=document.querySelector('#modal-title');
-    const progress=JSON.parse(localStorage.getItem('little-english-progress')||'{}');
-    const speak=word=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=.72;speechSynthesis.speak(u)};
-    function refreshTrail(){let n=0;document.querySelectorAll('.milestone').forEach(el=>{const done=!!progress[el.dataset.m];el.classList.toggle('done',done);el.querySelector('smaluÓÎ­¢G§²ÚîÆ­y×OXÛÛÚWOÏÓX]™›ÛÜŠX]œ˜[™ÛJ
-JŠ_Y˜]ÓX]Ú
-
-NØ]ØZ]™]È›ÛZ\ÙJOOœÙ][Y[İ]
-KÌ
-JNÛOYš[™X]Ú\Ê
-_X\ŞOY˜[ÙNÚYŠØÛÜ™OLLŠXXÚY]™J	ÛX]Ú	ÊNÚYŠ[İ™\ÏOOL	‰œØÛÜ™OLŠ]Ø\İ
-	ô%tbtdH4`4,4-È8 %4/ô/´aô`´.4/ô/´.ô`ôaô.4.ô/´`tcIÊNÙ˜]ÓX]Ú
-
-_B‚ˆÛÛœİX^™SX\VÉÌLLLLLLIË	ÌLIË	ÌLLLLIË	ÌLLIË	ÌLLLLIË	ÌLIË	ÌLLLLLLI×NÂˆÛÛœİX^™UÛÜ™ÏVÖÉü'ãc‰Ë	Ø\I×KÉü'ä,IË	ØØ]	×KÉø«d	Ë	Üİ\‰×KÉø¦¯IË	Ø˜[	×KÉü'æ¥ÉË	ØØ\‰×KÉü'äåIË	Ø›ÛÚÉ×WNÂˆÛÛœİX^™TÜİÏVÖÌKWKÌËWKÍKWWNÛ]\›Ï^ÜŒKÎŒ_KX^™S[İ™\ÏLX^™T›İ[™LKX^™U\™Ù]ÏV×KX^™QÛØ[LX^™SØÚÙYY˜[ÙNÂˆ[˜İ[Ûˆİ\\œ›İÜÊ
-^İ]K^ÛÛ[IĞ\œ›İÈY™[\™IÎÛX^™T›İ[™LNÛ™^X^™T›İ[™
-
-_Bˆ[˜İ[Ûˆ™^X^™T›İ[™
-
-^Ú\›Ï^ÜŒKÎŒ_NÛX^™S[İ™\ÏLÛX^™SØÚÙYY˜[ÙNØÛÛœİYÏV×NİÚ[JYË›[™İÊ^ØÛÛœİOSX]™›ÛÜŠX]œ˜[™ÛJ
-J›X^™UÛÜ™Ë›[™İ
-NÚYŠZYËš[˜ÛY\ÊJJZYËœ\Ú
-J_[X^™U\™Ù]ÏZYË›X\
-
-ÛÜ™JOOŠİÛÜ™ÜÎ›X^™TÜİÖÚW_JJNÛX^™QÛØ[SX]™›ÛÜŠX]œ˜[™ÛJ
-JŒÊNÙ˜]ÓX^™J
-NÜÙ][Y[İ]
-
-
-OOœÜXZÊ	Ñš[™H	ÊÛX^™UÛÜ™ÖÛX^™U\™Ù]ÖÛX^™QÛØ[KÛÜ™VÌWJKL
-_Bˆ[˜İ[Ûˆ˜]ÓX^™J
-^ØÛÛœİÛØ[[X^™UÛÜ™ÖÛX^™U\™Ù]ÖÛX^™QÛØ[KÛÜ™NØ\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´(ô/ô`4,4,´.ôcô.H4`t/´,´dt/t.´/´/4.4-4/´.t-4.4-4/ˆ4.´,4`4`´.4/t.´.4.´/´`´/´`4`ôcˆ4/t,4-ôbô,´,4-t`ˆ4.4,ô`4,Ü]ÛˆÛ\ÜÏH›X^™K]\ÚÈˆYH›X^™K[\İ[ˆ¼'å"ˆš[™H	ÙÛØ[ÌW_OØ]Û]ˆÛ\ÜÏH™Ø[YKX˜\ˆÜ[ˆÛ\ÜÏHœ[´(4,4`ô/t-ˆ	ÛX^™T›İ[™HÈÜÜ[Ü[ˆÛ\ÜÏHœ[´)t/´-4bÎˆ	ÛX^™S[İ™\ßOÜÜ[Ù]]ˆÛ\ÜÏH›X^™HÙ]]ˆÛ\ÜÏH˜ÛÛ›ÛÈ]ÛˆÛ\ÜÏH˜\œ›İÈ\ˆ]KY\H\¸¡¤OØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈYˆ]KY\H›Y¸¡¤Ø]Û]ÛˆÛ\ÜÏH˜\œ›İÈİÛˆˆ]KY\H™İÛˆ¸¡¤ÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈšYÚˆ]KY\HœšYÚ¸¡¤Ø]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈÛX^™K[\İ[‰ÊK›Û˜ÛXÚÏJ
-OOœÜXZÊ	Ñš[™H	ÊÙÛØ[ÌWJNØÛÛœİOX\™XKœ]Y\TÙ[XİÜŠ	Ë›X^™IÊNÙ›ÜŠ]LÜÎÜŠÊÊY›ÜŠ]ÏLØÏÎØÊÊÊ^ØÛÛœİYØİ[Y[˜Ü™X]Q[[Y[
-	Ù]‰ÊK][O[X^™U\™Ù]Ë™š[™
-OœÜÖÌOOO\‰‰œÜÖÌWOOOXÊNŞ˜Û\ÜÓ˜[YOIÛX^™KXÙ[	ÊÊX^™SX\Ü—VØ×OOOIÌIÏÉÈØ[	Î‰ÉÊJÊ][OÉÈ\™Ù]	Î‰ÉÊNÚYŠ][J^^ÛÛ[[X^™UÛÜ™ÖÚ][KÛÜ™VÌNÚYŠOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜Ê^^ÛÛ[Iü'é¢IÎÛK˜\[™
-
-_X\™XKœ]Y\TÙ[XİÜ[
-	ÖÙ]KY\—IÊK™›Ü‘XXÚ
-O˜‹›Û˜ÛXÚÏJ
-OO›[İ™R\›Ê‹™]\Ù]™\ŠJ_Bˆ[˜İ[Ûˆ[İ™R\›Ê\Š^ÚYŠX^™SØÚÙY
-\™]\›ØÛÛœİ[O^İ\–ËLKKİÛ–ÌKKY–ÌLWKšYÚ–ÌW_VÙ\—KœZ\›ËœŠÙ[VÌK˜ÏZ\›Ë˜ÊÙ[VÌWNÜÜXZÊ\ŠNÚYŠX^™SX\Ûœ—VÛ˜×OOOIÌIÊ^İØ\İ
-	ü'ã/È4%ô-4-t`tc4`t`´-t/t,IÊNÜ™]\›ŸZ\›Ï^Ü›œ‹Î›˜ßNÛX^™S[İ™\ÊÊÎØÛÛœİ™XXÚY[X^™U\™Ù]Ë™š[™[™^
-OœÜÖÌOOO[œ‰‰œÜÖÌWOOO[˜ÊNÚYŠ™XXÚYL
-^ÛX^™SØÚÙY]YNÚYŠ™XXÚYOO[X^™QÛØ[
-^ÜÜXZÊ	ÑÜ™X]H	ÊÛX^™UÛÜ™ÖÛX^™U\™Ù]ÖÜ™XXÚYKÛÜ™VÌWJNİØ\İ
-	ø«d4'ô`4,4,´.4.ôc4/t/ˆIÊNÜÙ][Y[İ]
-
-
-OOÚYŠX^™T›İ[™
-ÊÏM
-^ØXÚY]™J	Ø\œ›İÜÉÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\“X^™HX\İ\ˆH8«dÙ]´(´bÈ4/t,4b4dt.È4,´`t-H4aô-t`´bô`4-H4.´,4`4`´.4/t.´.OÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\\œ›İÜÊ
-H”^HYØZ[Ø]Û‰ßY[ÙH™^X^™T›İ[™
-
-_KÍL
-_Y[Ù^ÜÜXZÊ	ÕHYØZ[‰ÊNİØ\İ
-	ô+t`´/ˆ4-4`4`ô,ô,4cÈ4.´,4`4`´.4/t.´,ˆ4'ô/´/ô`4/´,t`ô.H4-tbtdHIÊNÜÙ][Y[İ]
-
-
-OOÚ\›Ï^ÜŒKÎŒ_NÛX^™SØÚÙYY˜[ÙNÙ˜]ÓX^™J
-_KL
-_\™]\›ŸY˜]ÓX^™J
-_B‚ˆÛÛœİØ]Ú][\ÏVÖÉü'ãc‰Ë	Ø\I×KÉü'ãc	Ë	Ø˜[˜[˜I×KÉü'ãaÉË	ÙÜ˜\\É×KÉø¦%IË	Øİ\	×KÉø«d	Ë	Üİ\‰×KÉü'äåIË	Ø›ÛÚÉ×WNÛ]Ø]Ú\™Ù]LØ]ÚØÛÜ™OL]™\ÏLË˜\ÚÙ]LŒŒ˜[\œÏV×KØ]Ú˜YL\İÜ]ÛLØ]Ú[›š[™ÏY˜[ÙNÂˆ[˜İ[Ûˆİ\Ø]Ú
-
-^ÜİÜØ]Ú
-
-Nİ]K^ÛÛ[IĞØ]ÚHÛÜ™ÉÎØØ]Ú\™Ù]SX]™›ÛÜŠX]œ˜[™ÛJ
-J˜Ø]Ú][\Ë›[™İ
-NØØ]ÚØÛÜ™OLÛ]™\ÏLÎØ˜\ÚÙ]LŒŒÙ˜[\œÏV×NØ\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´&ô/´,´.4`´/´.ôc4.´/ˆ4/t,4-ô,´,4/t/tbô.H4/ô`4-t-4/4-t`‹ˆ4(ô/ô`4,4,´.ô-t/t.4-Nˆ8¡¤8¡¤ˆ4.4.ô.4.´/t/´/ô.´.Ü]ˆÛ\ÜÏH™Ø[YKX˜\ˆ]ÛˆÛ\ÜÏHœ[ˆYH˜Ø]Ú]ÛÜ™¼'å"ˆØ]Úˆ	ØØ]Ú][\ÖØØ]Ú\™Ù]VÌW_OØ]ÛÜ[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú\ØÛÜ™H¸«dÈÜÜ[Ü[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú[]™\È¸§i;î#ø§i;î#ø§i;î#ÏÜÜ[Ù]]ˆÛ\ÜÏH˜Ø]Ú\İYÙH]ˆÛ\ÜÏH˜˜\ÚÙ]¼'éîÙ]Ù]]ˆÛ\ÜÏH˜Ø]ÚXÛÛ›ÛÈ]Ûˆ]K[[İ™OH›Y¸¡¤Ø]Û]Ûˆ]K[[İ™OHœšYÚ¸¡¤Ø]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊK›Û˜ÛXÚÏJ
-OOœÜXZÊØ]Ú][\ÖØØ]Ú\™Ù]VÌWJNØ\™XKœ]Y\TÙ[XİÜ[
-	ÖÙ]K[[İ™WIÊK™›Ü‘XXÚ
-OØ‹›ÛœÚ[\™İÛJ
-OO›[İ™P˜\ÚÙ]
-‹™]\Ù]›[İ™OOOIÛY	ÏËLÎŒÎ
-_JNØØ]Ú[›š[™Ï]YNÛ\İÜ]Û\\™›Ü›X[˜ÙK››İÊ
-NÜÜXZÊ	ĞØ]Ú	ÊØØ]Ú][\ÖØØ]Ú\™Ù]VÌWJNØØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
-_Bˆ[˜İ[Ûˆ[İ™P˜\ÚÙ]
-
-^Ø˜\ÚÙ]SX]›X^
-X]›Z[Š˜\ÚÙ]
-Ù
-JNØÛÛœİX\™XKœ]Y\TÙ[XİÜŠ	Ë˜˜\ÚÙ]	ÊNÚYŠŠX‹œİ[K›YX˜\ÚÙ]
-ÉÜ	ßBˆ[˜İ[ÛˆÜ]Û’][J
-^ØÛÛœİİYÙOX\™XKœ]Y\TÙ[XİÜŠ	Ë˜Ø]Ú\İYÙIÊNÚYŠ\İYÙJ\™]\›ØÛÛœİ[™^SX]œ˜[™ÛJ
-OØØ]Ú\™Ù]“X]™›ÛÜŠX]œ˜[™ÛJ
-J˜Ø]Ú][\Ë›[™İ
-K[YØİ[Y[˜Ü™X]Q[[Y[
-	Ù]‰ÊNÙ[˜Û\ÜÓ˜[YOIÙ˜[[™ÉÎÙ[^ÛÛ[XØ]Ú][\ÖÚ[™^VÌNØÛÛœİSX]œ˜[™ÛJ
-JLÙ[œİ[K›Y^
-ÉÜ	ÎÜİYÙK˜\[™
-[
-NÙ˜[\œËœ\Ú
-Ù[[™^N‹MMKÜYYŒKJÓX]œ˜[™ÛJ
-JŒKŒÍ_J_Bˆ[˜İ[ÛˆØ]ÚÛÜ
-›İÊ^ÚYŠXØ]Ú[›š[™Ê\™]\›ÚYŠ›İË[\İÜ]ÛÎ
-^ÜÜ]Û’][J
-NÛ\İÜ]Û[›İßXÛÛœİ˜\ÚÙ]ÜLÌÌÙ›ÜŠ]OY˜[\œË›[™İLNÚOLÚKKJ^ØÛÛœİY˜[\œÖÚWNÙ‹JÏY‹œÜYYÙ‹™[œİ[K˜[œÙ›Ü›OX˜[œÛ]VJ	Ù‹_\
-XÚYŠ‹O˜˜\ÚÙ]Ü	‰™‹OÍÍI‰™‹
-ÌÍO˜˜\ÚÙ]	‰™‹˜\ÚÙ]
-ÎLŠ^ÚYŠ‹š[™^OOXØ]Ú\™Ù]
-^ØØ]ÚØÛÜ™JÊÎÜÜXZÊØ]Ú][\ÖÙ‹š[™^VÌWJNØØ]Ú\™Ù]SX]™›ÛÜŠX]œ˜[™ÛJ
-J˜Ø]Ú][\Ë›[™İ
-NØÛÛœİÏX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊNÚYŠÊ]Ë^ÛÛ[Iü'å"ˆØ]Úˆ	ÊØØ]Ú][\ÖØØ]Ú\™Ù]VÌW_Y[Ù^Û]™\ËKNÜÜXZÊ	ÓÛÜÉÊ_Y‹™[œ™[[İ™J
-NÙ˜[\œËœÜXÙJKJNİ\]PØ]Ú
-
-NØÛÛ[Y_ZYŠ‹OŒÎMJ^Ù‹™[œ™[[İ™J
-NÙ˜[\œËœÜXÙJKJ__XØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
-_Bˆ[˜İ[Ûˆ\]PØ]Ú
-
-^ØÛÛœİÏX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú\ØÛÜ™IÊKX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú[]™\ÉÊNÚYŠÊ\Ë^ÛÛ[Iø«d	ÊØØ]ÚØÛÜ™JÉÈÈ	ÎÚYŠ
-[^ÛÛ[Iø§i;î#ÉËœ™\X]
-X]›X^
-]™\ÊJNÚYŠØ]ÚØÛÜ™ON
-^ÜİÜØ]Ú
-
-NØXÚY]™J	ØØ]Ú	ÊNÜÜXZÊ	Ôİ\\ˆØ]Ú\‰ÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\”İ\\ˆØ]Ú\ˆH<'éîÙ]´(´bÈ4/ô/´.t/4,4.È4,´`t-H4,4/t,ô.ô.4.t`t.´.4-H4`t.ô/´,´,OÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
-
-H”^HYØZ[Ø]Û‰ßY[ÙHYŠ]™\ÏL
-^ÜİÜØ]Ú
-
-NØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\‘ÛÛÙHH<'ã"Ù]´'ô/´/ô`4/´,t`ô.H4-tbtdH4`4,4-È4.4.ô/´,´.4`´/´.ôc4.´/ˆ4/t`ô-´/tbô-H4/ô`4-t-4/4-t`´bËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
-
-H”^HYØZ[Ø]Û‰ß_Bˆ[˜İ[ÛˆİÜØ]Ú
-
-^ØØ]Ú[›š[™ÏY˜[ÙNÚYŠØ]Ú˜YŠXØ[˜Ù[[š[X][Û‘œ˜[YJØ]Ú˜YŠNØØ]Ú˜YLÙ˜[\œË™›Ü‘XXÚ
-O™‹™[œ™[[İ™J
-JNÙ˜[\œÏV×_BˆØİ[Y[˜Y]™[\İ[™\Š	ÚÙ^YİÛ‰ËOOÚYŠ[[Ù[›Ü[Š\™]\›ÚYŠ]K^ÛÛ[OOIĞ\œ›İÈY™[\™IÉ‰–ÉĞ\œ›İÕ\	Ë	Ğ\œ›İÑİÛ‰Ë	Ğ\œ›İÓY	Ë	Ğ\œ›İÔšYÚ	×Kš[˜ÛY\ÊKšÙ^JJ^ÙKœ™]™[Y˜][
-
-NÛ[İ™R\›ÊKšÙ^Kœ™\XÙJ	Ğ\œ›İÉË	ÉÊKÓİÙ\Ø\ÙJ
-J_ZYŠ]K^ÛÛ[OOIĞØ]ÚHÛÜ™ÉÉ‰ŠKšÙ^OOOIĞ\œ›İÓY	ßKšÙ^OOOIĞ\œ›İÔšYÚ	ÊJ^ÙKœ™]™[Y˜][
-
-NÛ[İ™P˜\ÚÙ]
-KšÙ^OOOIĞ\œ›İÓY	ÏËLÎŒÎ
-__JNÂˆÊˆš[˜[Ø[YHYXÚ[šXÜÎˆİX›HX^™Hœ˜[˜Ú\È[™[XYÙKX˜\ÙYØ]Ú\ˆ
-‹ÂˆÛÛœİX^™SX\š[˜[VÉÌLLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLLI×NÂˆÛÛœİX^™P[š[X[ÏVŞÛ˜[YN‰ÙÙÉËŞ[X›Û‰×^ÌQÍŸIßKÛ˜[YN‰ØØ]	ËŞ[X›Û‰×^ÌQÌ_IßKÛ˜[YN‰Ü˜X˜š]	ËŞ[X›Û‰×^ÌQÌIßWNÂˆÛÛœİX^™Q[™ÏVÖÌKKÌËWKÌË×KÍËWNÛ]X^™P[š[X[ÓÛ›Ø\™V×KX^™UØ[YIÙÙÉÎÂˆ[˜İ[ÛˆÚY™›Y
-\İ
-^Ü™]\›ˆË‹‹›\İKœÛÜ
-
-
-OO“X]œ˜[™ÛJ
-KKJ_Bˆ[˜İ[Ûˆİ\\œ›İÜÊ
-^İ]K^ÛÛ[IĞ\œ›İÈY™[\™IÎÛX^™T›İ[™LNÛ™^X^™T›İ[™
-
-_Bˆ[˜İ[Ûˆ™^X^™T›İ[™
-
-^Ú\›Ï^ÜŒËÎNÛX^™S[İ™\ÏLÛX^™SØÚÙYY˜[ÙNØÛÛœİXÙ\Ï\ÚY™›Y
-X^™Q[™ÊKœÛXÙJÊK[š[X[Ï\ÚY™›Y
-X^™P[š[X[ÊNÛX^™P[š[X[ÓÛ›Ø\™X[š[X[Ë›X\
-
-[š[X[JOOŠØ[š[X[ÜÎœXÙ\ÖÚW_JJNÛX^™UØ[Y[X^™P[š[X[ÖÊX^™T›İ[™LJI[X^™P[š[X[Ë›[™İK›˜[YNÙ˜]ÓX^™J
-NÜÙ][Y[İ]
-
-
-OOœÜXZÊ	Ñš[™H	ÊÛX^™UØ[Y
-KÌ
-_Bˆ[˜İ[Ûˆ˜]ÓX^™J
-^Ø\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´&´,4`4`´.4/t.´.4`t`´/´cô`ˆ4,ˆ4/´`´-4-t.ôc4/tbôaH4`´`ô/ô.4.´,4aH4.4/t-H4/ô-t`4-t.´`4bô,´,4c´`ˆ4-4/´`4/´,ô`ËÜ]ÛˆÛ\ÜÏH›X^™K]\ÚÈˆYH›X^™K[\İ[ˆ‰ˆÌLÈš[™H	ÛX^™UØ[YOØ]Û]ˆÛ\ÜÏH™Ø[YKX˜\ˆÜ[ˆÛ\ÜÏHœ[´(4,4`ô/t-ˆ	ÛX^™T›İ[™HÈÜÜ[Ü[ˆÛ\ÜÏHœ[´)t/´-4bÎˆ	ÛX^™S[İ™\ßOÜÜ[Ù]]ˆÛ\ÜÏH›X^™HÙ]]ˆÛ\ÜÏH˜ÛÛ›ÛÈ]ÛˆÛ\ÜÏH˜\œ›İÈ\ˆ]KY\H\‰X\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈYˆ]KY\H›Y‰›\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈİÛˆˆ]KY\H™İÛˆ‰™\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈšYÚˆ]KY\HœšYÚ‰œ˜\œÏØ]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈÛX^™K[\İ[‰ÊK›Û˜ÛXÚÏJ
-OOœÜXZÊ	Ñš[™H	ÊÛX^™UØ[Y
-NØÛÛœİOX\™XKœ]Y\TÙ[XİÜŠ	Ë›X^™IÊNÙ›ÜŠ]LÜNÜŠÊÊY›ÜŠ]ÏLØÏNØÊÊÊ^ØÛÛœİÙ[YØİ[Y[˜Ü™X]Q[[Y[
-	Ù]‰ÊK][O[X^™P[š[X[ÓÛ›Ø\™™š[™
-OœÜÖÌOOO\‰‰œÜÖÌWOOOXÊNØÙ[˜Û\ÜÓ˜[YOIÛX^™KXÙ[	ÊÊX^™SX\š[˜[Ü—VØ×OOOIÌIÏÉÈØ[	Î‰ÉÊJÊ][OÉÈ\™Ù]	Î‰ÉÊJÊ][OË˜[š[X[›˜[YOOO[X^™UØ[YÉÈÛØ[	Î‰ÉÊJÊOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÏÉÈ\›ÉÎ‰ÉÊNÚYŠ][J^ØÛÛœİ[YÏYØİ[Y[˜Ü™X]Q[[Y[
-	Ú[YÉÊNÚ[YËœÜ˜ÏZ][K˜[š[X[œÜ˜ÎÚ[YË˜[Z][K˜[š[X[›˜[YNØÙ[˜\[™
-[YÊ_ZYŠOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÊXÙ[š[›™\’SIÉˆÌLMMÎÉÎÛK˜\[™
-Ù[
-_X\™XKœ]Y\TÙ[XİÜ[
-	ÖÙ]KY\—IÊK™›Ü‘XXÚ
-O˜‹›Û˜ÛXÚÏJ
-OO›[İ™R\›Ê‹™]\Ù]™\ŠJ_Bˆ[˜İ[Ûˆ[İ™R\›Ê\Š^ÚYŠX^™SØÚÙY
-\™]\›ØÛÛœİ^İ\–ËLKKİÛ–ÌKKY–ÌLWKšYÚ–ÌW_VÙ\—KœZ\›ËœŠÙÌK˜ÏZ\›Ë˜ÊÙÌWNÜÜXZÊ\ŠNÚYŠœœ˜Ï˜ÏX^™SX\š[˜[Ûœ—VÛ˜×OOOIÌIÊ^İØ\İ
-	ô%ô-4-t`tc4/t-t`ˆ4-4/´`4/´-´.´.	ÊNÜ™]\›ŸZ\›Ï^Ü›œ‹Î›˜ßNÛX^™S[İ™\ÊÊÎØÛÛœİ™XXÚY[X^™P[š[X[ÓÛ›Ø\™™š[™
-OœÜÖÌOOO[œ‰‰œÜÖÌWOOO[˜ÊNÚYŠ™XXÚYË˜[š[X[›˜[YOOO[X^™UØ[Y
-^ÛX^™SØÚÙY]YNÜÜXZÊ	ÑÜ™X]H	ÊÛX^™UØ[Y
-NİØ\İ
-	ô'ô`4,4,´.4.ôc4/t/ˆIÊNÜÙ][Y[İ]
-
-
-OOÚYŠX^™T›İ[™
-ÊÏM
-^ØXÚY]™J	Ø\œ›İÜÉÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\“X^™HX\İ\ˆOÙ]´$´`t-H4aô-t`´bô`4-H4a´-t.ô.4/t,4.t-4-t/tbËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\\œ›İÜÊ
-H”^HYØZ[Ø]Û‰ßY[ÙH™^X^™T›İ[™
-
-_KÍL
-NÜ™]\›ŸZYŠ™XXÚY
-^ÜÜXZÊ	ÕHYØZ[‹ˆš[™H	ÊÛX^™UØ[Y
-NİØ\İ
-	ô+t`´/ˆ	ÊÜ™XXÚY˜[š[X[›˜[YJÉËˆ4&4bt.	ÊÛX^™UØ[Y
-_Y˜]ÓX^™J
-_B‚ˆÛÛœİØ]Ú][\Ñš[˜[VŞÛ˜[YN‰Ø\IËŞ[X›Û‰×^ÌQŒÍ_IßKÛ˜[YN‰Ø˜[˜[˜IËŞ[X›Û‰×^ÌQŒÍßIßKÛ˜[YN‰Ø˜[	ËŞ[X›Û‰×^Ì‘IßKÛ˜[YN‰Øİ\	ËŞ[X›Û‰×^ÌŒM_IßKÛ˜[YN‰ØØ\‰ËŞ[X›Û‰×^ÌQMßIßKÛ˜[YN‰ÚÚ]IËŞ[X›Û‰×^ÌQN_IßWNÂˆ[˜İ[Ûˆ[››İ[˜ÙPØ]Ú
-
-^ØÛÛœİÛÜ™XØ]Ú][\Ñš[˜[ØØ]Ú\™Ù]K›˜[YNØÛÛœİ]ÛX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊNÚYŠ]ÛŠX]Û‹^ÛÛ[IÓ\İ[ˆØ]ÚH	ÊİÛÜ™ÜÙ][Y[İ]
-
-
-OOœÜXZÊ	ĞØ]ÚH	ÊİÛÜ™
-KN
-_Bˆ[˜İ[Ûˆİ\Ø]Ú
-
-^ÜİÜØ]Ú
-
-Nİ]K^ÛÛ[IĞØ]ÚHÛÜ™ÉÎØØ]Ú\™Ù]SX]™›ÛÜŠX]œ˜[™ÛJ
-J˜Ø]Ú][\Ñš[˜[›[™İ
-NØØ]ÚØÛÜ™OLÛ]™\ÏLÎØ˜\ÚÙ]LŒŒÙ˜[\œÏV×NØ\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´(t.ô`ôb4,4.H4-ô,4-4,4/t.4-H4.4.ô/´,´.4`´/´.ôc4.´/ˆ4/t`ô-´/t`ôcˆ4.´,4`4`´.4/t.´`ËÜ]ˆÛ\ÜÏH™Ø[YKX˜\ˆ]ÛˆÛ\ÜÏHœ[ˆYH˜Ø]Ú]ÛÜ™Ø]ÛÜ[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú\ØÛÜ™H”ØÛÜ™NˆÈÜÜ[Ü[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú[]™\È“]™\ÎˆÏÜÜ[Ù]]ˆÛ\ÜÏH˜Ø]Ú\İYÙH]ˆÛ\ÜÏH˜˜\ÚÙ]‰ˆÌLMLÌÏÙ]Ù]]ˆÛ\ÜÏH˜Ø]ÚXÛÛ›ÛÈ]Ûˆ]K[[İ™OH›Y‰›\œÏØ]Û]Ûˆ]K[[İ™OHœšYÚ‰œ˜\œÏØ]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊK›Û˜ÛXÚÏX[››İ[˜ÙPØ]ÚØ\™XKœ]Y\TÙ[XİÜ[
-	ÖÙ]K[[İ™WIÊK™›Ü‘XXÚ
-O˜‹›ÛœÚ[\™İÛJ
-OO›[İ™P˜\ÚÙ]
-‹™]\Ù]›[İ™OOOIÛY	ÏËLÎŒÎ
-JNØØ]Ú[›š[™Ï]YNÛ\İÜ]Û\\™›Ü›X[˜ÙK››İÊ
-NØ[››İ[˜ÙPØ]Ú
-
-NØØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
-_Bˆ[˜İ[ÛˆÜ]Û’][J
-^ØÛÛœİİYÙOX\™XKœ]Y\TÙ[XİÜŠ	Ë˜Ø]Ú\İYÙIÊNÚYŠ\İYÙJ\™]\›ØÛÛœİ[™^SX]œ˜[™ÛJ
-OØØ]Ú\™Ù]“X]™›ÛÜŠX]œ˜[™ÛJ
-J˜Ø]Ú][\Ñš[˜[›[™İ
-K[YØİ[Y[˜Ü™X]Q[[Y[
-	Ù]‰ÊNÙ[˜Û\ÜÓ˜[YOIÙ˜[[™ÉÎÙ[^ÛÛ[XØ]Ú][\Ñš[˜[Ú[™^KœŞ[X›ÛØÛÛœİSX]œ˜[™ÛJ
-JLÙ[œİ[K›Y^
-ÉÜ	ÎÜİYÙK˜\[™
-[
-NÙ˜[\œËœ\Ú
-Ù[[™^N‹MÜYYŒK
-ÓX]œ˜[™ÛJ
-JŒKŒŸJ_Bˆ[˜İ[ÛˆØ]ÚÛÜ
-›İÊ^ÚYŠXØ]Ú[›š[™Ê\™]\›ÚYŠ›İË[\İÜ]ÛL
-^ÜÜ]Û’][J
-NÛ\İÜ]Û[›İßY›ÜŠ]OY˜[\œË›[™İLNÚOLÚKKJ^ØÛÛœİY˜[\œÖÚWNÙ‹JÏY‹œÜYYÙ‹™[œİ[K˜[œÙ›Ü›OX˜[œÛ]VJ	Ù‹_\
-XÚYŠ‹OŒÌŒ	‰™‹OÍÍI‰™‹
-ÍMO˜˜\ÚÙ]	‰™‹˜\ÚÙ]
-ÎMŠ^ÚYŠ‹š[™^OOXØ]Ú\™Ù]
-^ØØ]ÚØÛÜ™JÊÎÜÜXZÊ	ÑÜ™X]H	ÊØØ]Ú][\Ñš[˜[Ù‹š[™^K›˜[YJNÛ]™^ÙÈ™^SX]™›ÛÜŠX]œ˜[™ÛJ
-J˜Ø]Ú][\Ñš[˜[›[™İ
-NİÚ[J™^OOXØ]Ú\™Ù]
-NØØ]Ú\™Ù][™^Ø[››İ[˜ÙPØ]Ú
-
-_Y[Ù^Û]™\ËKNÜÜXZÊ	ÓÛÜËˆØ]ÚH	ÊØØ]Ú][\Ñš[˜[ØØ]Ú\™Ù]K›˜[YJ_Y‹™[œ™[[İ™J
-NÙ˜[\œËœÜXÙJKJNİ\]PØ]Ú
-
-NØÛÛ[Y_ZYŠ‹O
-^Ù‹™[œ™[[İ™J
-NÙ˜[\œËœÜXÙJKJ__XØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
-_Bˆ[˜İ[Ûˆ\]PØ]Ú
-
-^ØÛÛœİÏX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú\ØÛÜ™IÊKX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú[]™\ÉÊNÚYŠÊ\Ë^ÛÛ[IÔØÛÜ™Nˆ	ÊØØ]ÚØÛÜ™JÉÈÈ	ÎÚYŠ
-[^ÛÛ[IÓ]™\Îˆ	ÊÓX]›X^
-]™\ÊNÚYŠØ]ÚØÛÜ™ON
-^ÜİÜØ]Ú
-
-NØXÚY]™J	ØØ]Ú	ÊNÜÜXZÊ	Ôİ\\ˆØ]Ú\‰ÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\”İ\\ˆØ]Ú\ˆOÙ]´$´`t-H4/ô`4-t-4/4-t`´bÈ4/ô/´.t/4,4/tbËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
-
-H”^HYØZ[Ø]Û‰ßY[ÙHYŠ]™\ÏL
-^ÜİÜØ]Ú
-
-NØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\‘ÛÛÙHOÙ]´'ô/´/ô`4/´,t`ô.H4-tbtdH4`4,4-ËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
-
-H”^HYØZ[Ø]Û‰ß_Bˆ[˜İ[Ûˆ˜]ÓX^™J
-^Ø\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´'ô-t`4`t/´/t,4-´.4`t`´/´cô`ˆ4,ˆ4/´`´-4-t.ôc4/tbôaH4`´`ô/ô.4.´,4aH4.4/t-H4/ô-t`4-t.´`4bô,´,4c´`ˆ4-4/´`4/´,ô`ËÜ]ÛˆÛ\ÜÏH›X^™K]\ÚÈˆYH›X^™K[\İ[ˆ‰ˆÌLÈš[™H	ÛX^™UØ[YOØ]Û]ˆÛ\ÜÏH™Ø[YKX˜\ˆÜ[ˆÛ\ÜÏHœ[´(4,4`ô/t-ˆ	ÛX^™T›İ[™HÈÜÜ[Ü[ˆÛ\ÜÏHœ[´)t/´-4bÎˆ	ÛX^™S[İ™\ßOÜÜ[Ù]]ˆÛ\ÜÏH›X^™HÙ]]ˆÛ\ÜÏH˜ÛÛ›ÛÈ]ÛˆÛ\ÜÏH˜\œ›İÈ\ˆ]KY\H\‰X\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈYˆ]KY\H›Y‰›\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈİÛˆˆ]KY\H™İÛˆ‰™\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈšYÚˆ]KY\HœšYÚ‰œ˜\œÏØ]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈÛX^™K[\İ[‰ÊK›Û˜ÛXÚÏJ
-OOœÜXZÊ	Ñš[™H	ÊÛX^™UØ[Y
-NØÛÛœİOX\™XKœ]Y\TÙ[XİÜŠ	Ë›X^™IÊNÙ›ÜŠ]LÜNÜŠÊÊY›ÜŠ]ÏLØÏNØÊÊÊ^ØÛÛœİÙ[YØİ[Y[˜Ü™X]Q[[Y[
-	Ù]‰ÊK][O[X^™P[š[X[ÓÛ›Ø\™™š[™
-OœÜÖÌOOO\‰‰œÜÖÌWOOOXÊNØÙ[˜Û\ÜÓ˜[YOIÛX^™KXÙ[	ÊÊX^™SX\š[˜[Ü—VØ×OOOIÌIÏÉÈØ[	Î‰ÉÊJÊ][OÉÈ\™Ù]	Î‰ÉÊJÊ][OË˜[š[X[›˜[YOOO[X^™UØ[YÉÈÛØ[	Î‰ÉÊJÊOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÏÉÈ\›ÉÎ‰ÉÊNÚYŠ][JXÙ[^ÛÛ[Z][K˜[š[X[œŞ[X›ÛÚYŠOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÊXÙ[š[›™\’SIÉˆÌLMMÎÉÎÛK˜\[™
-Ù[
-_X\™XKœ]Y\TÙ[XİÜ[
-	ÖÙ]KY\—IÊK™›Ü‘XXÚ
-O˜‹›Û˜ÛXÚÏJ
-OO›[İ™R\›Ê‹™]\Ù]™\ŠJ_Bˆ™Yœ™\Ú˜Z[
-
-NÂˆÜØÜš\‚Ø›ÙO‚Ú[‚
