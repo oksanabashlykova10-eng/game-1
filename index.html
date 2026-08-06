@@ -3,166 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Три в ряд</title>
+  <meta name="theme-color" content="#fff7e9">
+  <title>Little English Adventures</title>
   <style>
-    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; }
-    * { box-sizing: border-box; }
-    body {
-      min-height: 100vh; margin: 0; display: grid; place-items: center;
-      background: radial-gradient(circle at top, #4338ca, #16142b 55%, #090914);
-      color: #fff; user-select: none;
-    }
-    .game { width: min(94vw, 580px); text-align: center; }
-    h1 { margin: 0 0 8px; font-size: clamp(32px, 8vw, 54px); }
-    .hint { margin: 0 0 20px; color: #c7d2fe; }
-    .panel { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-    .stat, button {
-      border: 1px solid #ffffff2c; border-radius: 16px; background: #ffffff12;
-      box-shadow: inset 0 1px #ffffff20, 0 8px 24px #0004;
-    }
-    .stat { flex: 1; padding: 10px; font-size: 14px; color: #cbd5e1; }
-    .stat strong { display: block; color: white; font-size: 25px; }
-    #board {
-      display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px;
-      padding: 10px; border-radius: 22px; background: #08081680;
-      box-shadow: 0 20px 55px #0008; touch-action: none;
-    }
-    .cell {
-      aspect-ratio: 1; border: 0; border-radius: 17%; cursor: pointer;
-      display: grid; place-items: center; font-size: clamp(22px, 7vw, 43px);
-      background: #ffffff0b; transition: transform .14s, background .14s, opacity .2s;
-      filter: drop-shadow(0 5px 4px #0005);
-    }
-    .cell:hover { transform: translateY(-2px); background: #ffffff16; }
-    .cell.selected { outline: 3px solid #fff; transform: scale(.9); background: #ffffff26; }
-    .cell.matched { animation: pop .25s ease both; }
-    @keyframes pop { to { transform: scale(1.35); opacity: 0; } }
-    #message { height: 28px; margin: 13px 0 5px; color: #fde68a; font-weight: 700; }
-    button { color: white; padding: 11px 18px; cursor: pointer; font-weight: 700; }
-    button:hover { background: #ffffff20; }
-    @media (max-width: 430px) { #board { gap: 4px; padding: 7px; } }
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap');
+    :root{--ink:#30224c;--violet:#7846d8;--coral:#ff786d;--mint:#9ed98e;--sun:#ffc857;--paper:#fffaf0;--shadow:0 18px 45px #4a2f7030}
+    *{box-sizing:border-box} body{margin:0;color:var(--ink);font-family:Nunito,system-ui,sans-serif;background:#fff7e9;min-height:100vh} button{font:inherit}
+    .sky{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 12% 5%,#ffe4ae 0 9%,transparent 25%),radial-gradient(circle at 92% 15%,#d5c2ff 0 8%,transparent 23%),linear-gradient(180deg,#fff6df,#f5ecff 55%,#e3f4dc)}
+    .sky:after{content:'?  ·  ?  ·  ?';position:absolute;top:130px;left:5%;right:5%;font-size:36px;letter-spacing:8vw;color:#ffffffaa;white-space:nowrap;overflow:hidden}
+    header{max-width:1240px;margin:20px auto 0;padding:0 22px}.nav{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#fffdf7eF;border:2px solid #fff;border-radius:28px;padding:12px 18px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+    .brand{display:flex;align-items:center;gap:11px;font-family:'Baloo 2';font-weight:800;font-size:21px}.brand-badge{display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:linear-gradient(145deg,#ffcf5d,#ff8d72);font-size:28px;transform:rotate(-4deg)}
+    .nav-note{padding:10px 16px;border-radius:15px;background:#f3ebff;color:#6940b0;font-weight:800}.hero{max-width:1050px;margin:54px auto 34px;padding:0 22px;text-align:center}.eyebrow{display:inline-block;padding:8px 16px;background:white;border-radius:999px;color:#8052c9;font-weight:800;box-shadow:0 8px 24px #6b499120}
+    h1{font-family:'Baloo 2';font-size:clamp(44px,8vw,86px);line-height:.92;margin:20px 0 12px;letter-spacing:-2px}.rainbow{background:linear-gradient(90deg,#ff715f,#eea82f,#77a93c,#4c9ccc,#8b50d7);-webkit-background-clip:text;color:transparent}.hero p{font-size:clamp(18px,2.5vw,24px);margin:0;color:#675879}
+    main{max-width:1240px;margin:auto;padding:0 22px 70px}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.card{background:var(--paper);border:3px solid white;border-radius:30px;overflow:hidden;box-shadow:var(--shadow);transition:.25s;position:relative}.card:hover{transform:translateY(-7px) rotate(.3deg);box-shadow:0 24px 55px #4a2f7040}.card-image{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border:0;cursor:pointer;background:#e8dbff}.card-image:focus-visible{outline:6px solid #ffcf5d;outline-offset:-6px}.card-body{padding:20px 22px 22px}.number{position:absolute;top:14px;left:14px;background:#fff9;color:#7140c5;border:2px solid white;padding:7px 11px;border-radius:999px;font-weight:900;backdrop-filter:blur(8px)}
+    h2{font-family:'Baloo 2';font-size:30px;line-height:1;margin:0 0 8px}.card p{margin:0 0 15px;line-height:1.45;color:#6c6079}.tags{display:flex;gap:7px;flex-wrap:wrap}.tag{font-size:12px;font-weight:900;border-radius:999px;padding:6px 9px;background:#ece3ff;color:#7049ab}.tag:nth-child(2){background:#ffe7b3;color:#8b5b0c}.tag:nth-child(3){background:#dff1d6;color:#477637}
+    .play{margin-top:16px;width:100%;border:0;border-radius:16px;padding:12px;color:white;background:linear-gradient(135deg,#8a58e3,#6634bd);box-shadow:0 8px 0 #4e268e;font-weight:900;cursor:pointer}.play:active{transform:translateY(5px);box-shadow:0 3px 0 #4e268e}
+    .journey{margin-top:44px;background:#fffdf7;border:3px solid white;border-radius:32px;padding:28px;box-shadow:var(--shadow)}.journey-head{display:flex;justify-content:space-between;align-items:end;gap:12px}.journey h2{font-size:32px}.journey p{margin:4px 0 0;color:#776983}.stars-count{white-space:nowrap;background:#fff0c5;padding:9px 14px;border-radius:999px;font-weight:900;color:#936000}
+    .trail{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-top:26px}.trail:before{content:'';position:absolute;left:15%;right:15%;top:35px;border-top:5px dashed #d7c4a2}.milestone{text-align:center;position:relative}.badge{width:74px;height:74px;margin:auto;display:grid;place-items:center;border-radius:50%;background:#e5ddd0;border:6px solid #fff;box-shadow:0 7px 18px #5a416428;font-size:31px;filter:grayscale(1);transition:.35s}.milestone.done .badge{background:linear-gradient(145deg,#ffd766,#ff986c);filter:none;transform:scale(1.07) rotate(-5deg)}.milestone strong{display:block;margin-top:9px}.milestone small{color:#84768d}.milestone.done small{color:#5d8b42;font-weight:900}
+    dialog{border:0;padding:0;border-radius:30px;width:min(94vw,760px);max-height:92vh;background:#fffaf0;color:var(--ink);box-shadow:0 30px 100px #26163f88}dialog::backdrop{background:#201330b8;backdrop-filter:blur(8px)}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:2px solid #eee3d5}.modal-head h2{margin:0}.close{border:0;background:#eee5f8;width:42px;height:42px;border-radius:50%;font-size:23px;cursor:pointer}.game-area{padding:20px;min-height:430px;text-align:center}.game-note{margin:0 auto 16px;color:#695c76;max-width:560px}.game-bar{display:flex;justify-content:center;gap:10px;margin-bottom:15px}.pill{background:white;border:2px solid #eadff5;padding:8px 13px;border-radius:999px;font-weight:900}
+    #match-board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;max-width:480px;margin:auto;background:#665090;padding:9px;border-radius:22px}.gem{aspect-ratio:1;border:0;border-radius:16px;background:#fff7;font-size:clamp(25px,6vw,43px);cursor:pointer;transition:.12s}.gem.selected{outline:4px solid #ffdb59;transform:scale(.88)}
+    .prompt{font-family:'Baloo 2';font-size:clamp(30px,6vw,46px);margin:8px 0 20px}.maze{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:455px;margin:auto;background:#5d427f;padding:9px;border-radius:20px}.maze-cell{aspect-ratio:1;display:grid;place-items:center;border-radius:9px;background:#f7e7bc;font-size:29px}.maze-cell.wall{background:#63a957;box-shadow:inset 0 -5px #3c8039}.controls{display:grid;grid-template-columns:repeat(3,58px);justify-content:center;gap:6px;margin-top:15px}.arrow{height:50px;border:0;border-radius:14px;background:#8260d6;color:white;font-size:24px;font-weight:900;box-shadow:0 5px 0 #583c9e;cursor:pointer}.arrow:active{transform:translateY(3px);box-shadow:0 2px 0 #583c9e}.arrow.up{grid-column:2}.arrow.left{grid-column:1}.arrow.down{grid-column:2}.arrow.right{grid-column:3}.catch-stage{position:relative;width:min(100%,560px);height:390px;margin:auto;overflow:hidden;border:5px solid white;border-radius:24px;background:linear-gradient(#74cef5,#d9f6ff 68%,#9bd273 69%);box-shadow:inset 0 -28px #6bb750}.falling{position:absolute;top:-55px;font-size:43px;line-height:1;filter:drop-shadow(0 4px 3px #31577955)}.basket{position:absolute;bottom:12px;width:92px;height:48px;display:grid;place-items:center;font-size:55px;transition:left .06s linear}.catch-controls{display:flex;justify-content:center;gap:15px;margin-top:13px}.catch-controls button{width:100px;height:52px;border:0;border-radius:15px;background:#8260d6;color:white;font-size:26px;box-shadow:0 5px 0 #583c9e;cursor:pointer}
+    .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,120px);background:#33224e;color:white;padding:13px 20px;border-radius:999px;font-weight:900;z-index:20;transition:.3s}.toast.show{transform:translate(-50%,0)}
+    @media(max-width:850px){.cards{grid-template-columns:1fr;max-width:580px;margin:auto}.nav-note{display:none}.card-image{aspect-ratio:16/9}.hero{margin-top:40px}.trail{gap:8px}.trail:before{left:12%;right:12%}}
+    @media(max-width:520px){header,main,.hero{padding-left:12px;padding-right:12px}.brand{font-size:17px}.brand-badge{width:42px;height:42px}.journey{padding:21px 12px}.journey-head{align-items:start;flex-direction:column}.trail{font-size:13px}.badge{width:62px;height:62px}.trail:before{top:29px}.game-area{padding:15px}.animal-grid{grid-template-columns:repeat(2,1fr)}.choice{min-height:100px}.modal-head h2{font-size:25px}}
   </style>
 </head>
 <body>
-  <main class="game">
-    <h1>Три в ряд</h1>
-    <p class="hint">Меняйте соседние фишки и собирайте линии из трёх и более</p>
-    <div class="panel">
-      <div class="stat">Счёт<strong id="score">0</strong></div>
-      <div class="stat">Ходы<strong id="moves">30</strong></div>
-      <div class="stat">Рекорд<strong id="best">0</strong></div>
-    </div>
-    <div id="board" aria-label="Игровое поле"></div>
-    <div id="message"></div>
-    <button id="restart">Новая игра</button>
+  <div class="sky"></div>
+  <header><nav class="nav"><div class="brand"><span class="brand-badge">??</span><span>Little English<br>Adventures</span></div><div class="nav-note">?? Для детей 5-6 лет</div></nav></header>
+  <section class="hero"><span class="eyebrow">Learn  Play  Shine</span><h1>English is a <span class="rainbow">little adventure!</span></h1><p>Три короткие игры для первых английских слов</p></section>
+  <main>
+    <section class="cards" aria-label="Игры">
+      <article class="card"><span class="number">Game 1</span><img class="card-image" src="assets/match-learn.png" alt="Весёлые фрукты в игре три в ряд" data-open="match" tabindex="0"><div class="card-body"><h2>Match & Learn</h2><p>Меняй соседние фрукты местами. Собери три одинаковых - услышишь их название по-английски!</p><div class="tags"><span class="tag">Fruits</span><span class="tag">Words</span><span class="tag">Logic</span></div><button class="play" data-open="match">Play now </button></div></article>
+      <article class="card"><span class="number">Game 2</span><img class="card-image" src="assets/arrow-adventure.png" alt="Сова проходит лабиринт с помощью стрелок" data-open="arrows" tabindex="0"><div class="card-body"><h2>Arrow Adventure</h2><p>Проведи совёнка через лабиринт к звезде. Управляй стрелками на экране или клавиатуре!</p><div class="tags"><span class="tag">Maze</span><span class="tag">Directions</span><span class="tag">Logic</span></div><button class="play" data-open="arrows">Play now </button></div></article>
+      <article class="card"><span class="number">Game 3</span><img class="card-image" src="assets/catch-words.png" alt="Сова ловит падающие предметы корзиной" data-open="catch" tabindex="0"><div class="card-body"><h2>Catch the Words</h2><p>Двигай корзину и лови только тот предмет, который назван по-английски. Не промахнись!</p><div class="tags"><span class="tag">Arcade</span><span class="tag">Listening</span><span class="tag">Reaction</span></div><button class="play" data-open="catch">Play now </button></div></article>
+    </section>
+    <section class="journey"><div class="journey-head"><div><h2>My learning trail</h2><p>Играй и двигайся по пунктирной дорожке от достижения к достижению!</p></div><div class="stars-count">? <span id="star-count">0</span> / 3</div></div><div class="trail"><div class="milestone" data-m="match"><div class="badge">??</div><strong>Fruit Friend</strong><small>Пройди Match & Learn</small></div><div class="milestone" data-m="arrows"><div class="badge">??</div><strong>Maze Master</strong><small>Пройди Arrow Adventure</small></div><div class="milestone" data-m="catch"><div class="badge">??</div><strong>Super Catcher</strong><small>Пройди Catch the Words</small></div></div></section>
   </main>
 
+  <dialog id="game-modal"><div class="modal-head"><h2 id="modal-title"></h2><button class="close" aria-label="Закрыть">?</button></div><div class="game-area" id="game-area"></div></dialog><div class="toast" id="toast"></div>
   <script>
-    const SIZE = 8;
-    const ICONS = ['??', '??', '??', '??', '??', '??'];
-    const boardEl = document.querySelector('#board');
-    const scoreEl = document.querySelector('#score');
-    const movesEl = document.querySelector('#moves');
-    const bestEl = document.querySelector('#best');
-    const messageEl = document.querySelector('#message');
-    let board = [], selected = null, score = 0, moves = 30, busy = false;
+    const modal=document.querySelector('#game-modal'),area=document.querySelector('#game-area'),title=document.querySelector('#modal-title');
+    const progress=JSON.parse(localStorage.getItem('little-english-progress')||'{}');
+    const speak=word=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=.72;speechSynthesis.speak(u)};
+    function refreshTrail(){let n=0;document.querySelectorAll('.milestone').forEach(el=>{const done=!!progress[el.dataset.m];el.classList.toggle('done',done);el.querySelector('small').textContent=done?'? Достижение получено':el.dataset.m==='match'?'Пройди Match & Learn':el.dataset.m==='arrows'?'Пройди Arrow Adventure':'Пройди Catch the Words';if(done)n++});document.querySelector('#star-count').textContent=n}
+    function achieve(game){if(!progress[game]){progress[game]=true;localStorage.setItem('little-english-progress',JSON.stringify(progress));refreshTrail();toast('? Новое достижение!')}}
+    function toast(msg){const el=document.querySelector('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
+    document.querySelector('.close').onclick=()=>{stopCatch();modal.close()};modal.onclick=e=>{if(e.target===modal){stopCatch();modal.close()}};
+    document.querySelectorAll('[data-open]').forEach(el=>{el.onclick=()=>openGame(el.dataset.open);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openGame(el.dataset.open)}}});
+    function openGame(game){stopCatch();modal.showModal();game==='match'?startMatch():game==='arrows'?startArrows():startCatch()}
 
-    const randomIcon = () => ICONS[Math.floor(Math.random() * ICONS.length)];
-    const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const fruits=[['??','apple'],['??','banana'],['??','grapes'],['??','strawberry'],['??','orange'],['??','blueberry']];let mb,sel,score,moves,busy;
+    function startMatch(){title.textContent='Match & Learn';score=0;moves=12;busy=false;sel=null;mb=Array.from({length:6},()=>Array.from({length:6},()=>Math.floor(Math.random()*6)));while(findMatches().size)mb=Array.from({length:6},()=>Array.from({length:6},()=>Math.floor(Math.random()*6)));drawMatch()}
+    function findMatches(){const s=new Set;for(let r=0;r<6;r++)for(let c=0;c<6;c++){if(c<4&&mb[r][c]===mb[r][c+1]&&mb[r][c]===mb[r][c+2]){let x=c;while(x<6&&mb[r][x]===mb[r][c])s.add(r+','+x++)}if(r<4&&mb[r][c]===mb[r+1][c]&&mb[r][c]===mb[r+2][c]){let y=r;while(y<6&&mb[y][c]===mb[r][c])s.add(y++ +','+c)}}return s}
+    function drawMatch(){area.innerHTML=`<p class="game-note">Нажми на фрукт, затем на соседний. Собери 3 одинаковых!</p><div class="game-bar"><span class="pill">? ${score}</span><span class="pill">Ходы: ${moves}</span></div><div id="match-board"></div>`;const b=area.querySelector('#match-board');mb.forEach((row,r)=>row.forEach((v,c)=>{const x=document.createElement('button');x.className='gem'+(sel&&sel.r===r&&sel.c===c?' selected':'');x.textContent=fruits[v][0];x.onclick=()=>pickGem(r,c);b.append(x)}))}
+    async function pickGem(r,c){if(busy||moves<=0)return;if(!sel){sel={r,c};drawMatch();return}const a=sel,d={r,c};sel=null;if(Math.abs(a.r-r)+Math.abs(a.c-c)!==1){sel=d;drawMatch();return}[mb[a.r][a.c],mb[r][c]]=[mb[r][c],mb[a.r][a.c]];let m=findMatches();if(!m.size){[mb[a.r][a.c],mb[r][c]]=[mb[r][c],mb[a.r][a.c]];toast('Попробуй другой ход!');drawMatch();return}moves--;busy=true;while(m.size){const first=[...m][0].split(',').map(Number);speak(fruits[mb[first[0]][first[1]]][1]);score+=m.size;m.forEach(k=>{const[q,w]=k.split(',').map(Number);mb[q][w]=null});for(let x=0;x<6;x++){const col=[];for(let y=5;y>=0;y--)if(mb[y][x]!=null)col.push(mb[y][x]);for(let y=5,i=0;y>=0;y--,i++)mb[y][x]=col[i]??Math.floor(Math.random()*6)}drawMatch();await new Promise(q=>setTimeout(q,300));m=findMatches()}busy=false;if(score>=12)achieve('match');if(moves===0&&score<12)toast('Ещё раз - почти получилось!');drawMatch()}
 
-    function createBoard() {
-      board = Array.from({ length: SIZE }, () => Array(SIZE).fill(''));
-      for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) {
-        do board[r][c] = randomIcon();
-        while ((c > 1 && board[r][c] === board[r][c-1] && board[r][c] === board[r][c-2]) ||
-               (r > 1 && board[r][c] === board[r-1][c] && board[r][c] === board[r-2][c]));
-      }
-    }
+    const mazeMap=['1111111','1000001','1011101','1000101','1110101','1000001','1111111'];let hero={r:1,c:1},mazeMoves=0;
+    function startArrows(){title.textContent='Arrow Adventure';hero={r:1,c:1};mazeMoves=0;drawMaze();setTimeout(()=>speak('Find the star'),250)}
+    function drawMaze(){area.innerHTML=`<p class="game-note">Дойди до звезды. Слушай названия направлений на английском!</p><div class="game-bar"><span class="pill">Ходы: ${mazeMoves}</span><span class="pill">Цель: ? star</span></div><div class="maze"></div><div class="controls"><button class="arrow up" data-dir="up"></button><button class="arrow left" data-dir="left"></button><button class="arrow down" data-dir="down"></button><button class="arrow right" data-dir="right"></button></div>`;const m=area.querySelector('.maze');for(let r=0;r<7;r++)for(let c=0;c<7;c++){const x=document.createElement('div');x.className='maze-cell'+(mazeMap[r][c]==='1'?' wall':'');if(r===hero.r&&c===hero.c)x.textContent='??';if(r===5&&c===1)x.textContent='?';m.append(x)}area.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>moveHero(b.dataset.dir))}
+    function moveHero(dir){const delta={up:[-1,0],down:[1,0],left:[0,-1],right:[0,1]}[dir],nr=hero.r+delta[0],nc=hero.c+delta[1];speak(dir);if(mazeMap[nr][nc]==='1'){toast('?? Здесь стена!');return}hero={r:nr,c:nc};mazeMoves++;if(nr===5&&nc===1){achieve('arrows');speak('You found the star!');area.innerHTML='<div class="prompt">You found the star! ?</div><p>Лабиринт пройден!</p><button class="play" onclick="startArrows()">Play again</button>';return}drawMaze()}
 
-    function render(matches = new Set()) {
-      boardEl.innerHTML = '';
-      board.forEach((row, r) => row.forEach((icon, c) => {
-        const cell = document.createElement('button');
-        cell.className = 'cell';
-        cell.textContent = icon;
-        cell.setAttribute('aria-label', `Фишка ${icon}, строка ${r+1}, столбец ${c+1}`);
-        if (selected?.r === r && selected?.c === c) cell.classList.add('selected');
-        if (matches.has(`${r},${c}`)) cell.classList.add('matched');
-        cell.onclick = () => choose(r, c);
-        boardEl.append(cell);
-      }));
-      scoreEl.textContent = score;
-      movesEl.textContent = moves;
-      bestEl.textContent = localStorage.getItem('match3-best') || 0;
-    }
-
-    function findMatches() {
-      const found = new Set();
-      for (let r = 0; r < SIZE; r++) for (let c = 0; c < SIZE; c++) {
-        if (c < SIZE-2 && board[r][c] && board[r][c] === board[r][c+1] && board[r][c] === board[r][c+2]) {
-          let x = c; while (x < SIZE && board[r][x] === board[r][c]) found.add(`${r},${x++}`);
-        }
-        if (r < SIZE-2 && board[r][c] && board[r][c] === board[r+1][c] && board[r][c] === board[r+2][c]) {
-          let y = r; while (y < SIZE && board[y][c] === board[r][c]) found.add(`${y++},${c}`);
-        }
-      }
-      return found;
-    }
-
-    function swap(a, b) { [board[a.r][a.c], board[b.r][b.c]] = [board[b.r][b.c], board[a.r][a.c]]; }
-    const adjacent = (a, b) => Math.abs(a.r-b.r) + Math.abs(a.c-b.c) === 1;
-
-    async function choose(r, c) {
-      if (busy || moves <= 0) return;
-      const current = { r, c };
-      if (!selected) { selected = current; render(); return; }
-      if (selected.r === r && selected.c === c) { selected = null; render(); return; }
-      if (!adjacent(selected, current)) { selected = current; render(); return; }
-
-      busy = true;
-      const previous = selected; selected = null;
-      swap(previous, current); render(); await wait(180);
-      if (!findMatches().size) {
-        swap(previous, current); messageEl.textContent = 'Этот ход не создаёт комбинацию'; render();
-        await wait(700); messageEl.textContent = ''; busy = false; return;
-      }
-      moves--; await resolveBoard();
-      if (moves <= 0) finish();
-      busy = false;
-    }
-
-    async function resolveBoard() {
-      let combo = 0, matches;
-      while ((matches = findMatches()).size) {
-        combo++;
-        score += matches.size * 10 * combo;
-        messageEl.textContent = combo > 1 ? `Комбо ?${combo}!` : `+${matches.size * 10}`;
-        render(matches); await wait(260);
-        matches.forEach(key => { const [r,c] = key.split(',').map(Number); board[r][c] = ''; });
-        for (let c = 0; c < SIZE; c++) {
-          const column = [];
-          for (let r = SIZE-1; r >= 0; r--) if (board[r][c]) column.push(board[r][c]);
-          for (let r = SIZE-1, i = 0; r >= 0; r--, i++) board[r][c] = column[i] || randomIcon();
-        }
-        render(); await wait(240);
-      }
-      messageEl.textContent = '';
-    }
-
-    function finish() {
-      const best = Math.max(score, Number(localStorage.getItem('match3-best') || 0));
-      localStorage.setItem('match3-best', best);
-      messageEl.textContent = `Игра окончена! Результат: ${score}`;
-      render();
-    }
-
-    function start() {
-      score = 0; moves = 30; selected = null; busy = false; messageEl.textContent = '';
-      createBoard(); render();
-    }
-
-    document.querySelector('#restart').onclick = start;
-    start();
+    const catchItems=[['??','apple'],['??','banana'],['??','grapes'],['?','cup'],['?','star'],['??','book']];let catchTarget=0,catchScore=0,lives=3,basketX=220,fallers=[],catchRaf=0,lastSpawn=0,catchRunning=false;
+    function startCatch(){stopCatch();title.textContent='Catch the Words';catchTarget=Math.floor(Math.random()*catchItems.length);catchScore=0;lives=3;basketX=220;fallers=[];area.innerHTML=`<p class="game-note">Лови только названный предмет. Управление:   или кнопки.</p><div class="game-bar"><button class="pill" id="catch-word">?? Catch: ${catchItems[catchTarget][1]}</button><span class="pill" id="catch-score">? 0 / 8</span><span class="pill" id="catch-lives">??????</span></div><div class="catch-stage"><div class="basket">??</div></div><div class="catch-controls"><button data-move="left"></button><button data-move="right"></button></div>`;area.querySelector('#catch-word').onclick=()=>speak(catchItems[catchTarget][1]);area.querySelectorAll('[data-move]').forEach(b=>{b.onpointerdown=()=>moveBasket(b.dataset.move==='left'?-38:38)});catchRunning=true;lastSpawn=performance.now();speak('Catch '+catchItems[catchTarget][1]);catchRaf=requestAnimationFrame(catchLoop)}
+    function moveBasket(dx){basketX=Math.max(0,Math.min(468,basketX+dx));const b=area.querySelector('.basket');if(b)b.style.left=basketX+'px'}
+    function spawnItem(){const stage=area.querySelector('.catch-stage');if(!stage)return;const index=Math.random()<.42?catchTarget:Math.floor(Math.random()*catchItems.length),el=document.createElement('div');el.className='falling';el.textContent=catchItems[index][0];const x=Math.random()*500;el.style.left=x+'px';stage.append(el);fallers.push({el,index,x,y:-55,speed:1.9+Math.random()*1.35})}
+    function catchLoop(now){if(!catchRunning)return;if(now-lastSpawn>780){spawnItem();lastSpawn=now}const basketTop=330;for(let i=fallers.length-1;i>=0;i--){const f=fallers[i];f.y+=f.speed;f.el.style.transform=`translateY(${f.y}px)`;if(f.y>basketTop&&f.y<375&&f.x+35>basketX&&f.x<basketX+92){if(f.index===catchTarget){catchScore++;speak(catchItems[f.index][1]);catchTarget=Math.floor(Math.random()*catchItems.length);const w=area.querySelector('#catch-word');if(w)w.textContent='?? Catch: '+catchItems[catchTarget][1]}else{lives--;speak('Oops')}f.el.remove();fallers.splice(i,1);updateCatch();continue}if(f.y>395){f.el.remove();fallers.splice(i,1)}}catchRaf=requestAnimationFrame(catchLoop)}
+    function updateCatch(){const s=area.querySelector('#catch-score'),l=area.querySelector('#catch-lives');if(s)s.textContent='? '+catchScore+' / 8';if(l)l.textContent='??'.repeat(Math.max(0,lives));if(catchScore>=8){stopCatch();achieve('catch');speak('Super catcher');area.innerHTML='<div class="prompt">Super catcher! ??</div><p>Ты поймал все английские слова!</p><button class="play" onclick="startCatch()">Play again</button>'}else if(lives<=0){stopCatch();area.innerHTML='<div class="prompt">Good try! ??</div><p>Попробуй ещё раз и лови только нужные предметы.</p><button class="play" onclick="startCatch()">Play again</button>'}}
+    function stopCatch(){catchRunning=false;if(catchRaf)cancelAnimationFrame(catchRaf);catchRaf=0;fallers.forEach(f=>f.el.remove());fallers=[]}
+    document.addEventListener('keydown',e=>{if(!modal.open)return;if(title.textContent==='Arrow Adventure'&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();moveHero(e.key.replace('Arrow','').toLowerCase())}if(title.textContent==='Catch the Words'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){e.preventDefault();moveBasket(e.key==='ArrowLeft'?-38:38)}});
+    refreshTrail();
   </script>
 </body>
 </html>
