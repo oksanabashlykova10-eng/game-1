@@ -9,7 +9,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap');
     :root{--ink:#30224c;--violet:#7846d8;--coral:#ff786d;--mint:#9ed98e;--sun:#ffc857;--paper:#fffaf0;--shadow:0 18px 45px #4a2f7030}
     *{box-sizing:border-box} body{margin:0;color:var(--ink);font-family:Nunito,system-ui,sans-serif;background:#fff7e9;min-height:100vh} button{font:inherit}
-    .sky{position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 12% 5%,#ffe4ae 0 9%,transparent 25%),radial-gradient(circle at 92% 15%,#d5c2ff 0 8%,transparent 23%),linear-gradient(180deg,#fff6df,#f5ecff 55%,#e3f4dc)}
+    .sky{position:fixed;inset:0;z-index:-1;background:linear-gradient(#170d2a99,#27133d80),url('assets/library-background.png') center top/cover fixed}
     .sky:after{content:'âœ¦  Â·  âœ§  Â·  âœ¦';position:absolute;top:130px;left:5%;right:5%;font-size:36px;letter-spacing:8vw;color:#ffffffaa;white-space:nowrap;overflow:hidden}
     header{max-width:1240px;margin:20px auto 0;padding:0 22px}.nav{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#fffdf7eF;border:2px solid #fff;border-radius:28px;padding:12px 18px;box-shadow:var(--shadow);backdrop-filter:blur(14px)}
     .brand{display:flex;align-items:center;gap:11px;font-family:'Baloo 2';font-weight:800;font-size:21px}.brand-badge{display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:linear-gradient(145deg,#ffcf5d,#ff8d72);font-size:28px;transform:rotate(-4deg)}
@@ -26,6 +26,14 @@
     .toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,120px);background:#33224e;color:white;padding:13px 20px;border-radius:999px;font-weight:900;z-index:20;transition:.3s}.toast.show{transform:translate(-50%,0)}
     @media(max-width:850px){.cards{grid-template-columns:1fr;max-width:580px;margin:auto}.nav-note{display:none}.card-image{aspect-ratio:16/9}.hero{margin-top:40px}.trail{gap:8px}.trail:before{left:12%;right:12%}}
     @media(max-width:520px){header,main,.hero{padding-left:12px;padding-right:12px}.brand{font-size:17px}.brand-badge{width:42px;height:42px}.journey{padding:21px 12px}.journey-head{align-items:start;flex-direction:column}.trail{font-size:13px}.badge{width:62px;height:62px}.trail:before{top:29px}.game-area{padding:15px}.animal-grid{grid-template-columns:repeat(2,1fr)}.choice{min-height:100px}.modal-head h2{font-size:25px}}
+    /* Storybook visual refresh */
+    .sky:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 0 68%,#190d2d 100%)}
+    .hero{margin-top:46px}.eyebrow{background:#fff8e9;border:1px solid #f6dba7;color:#7043b4;box-shadow:0 8px 24px #0004}
+    h1{font-size:clamp(44px,8vw,78px);color:#fff4d0;text-shadow:0 5px 0 #5b2f48,0 10px 28px #000}.rainbow{background:linear-gradient(90deg,#ffc759,#ffa373,#d69cff,#a5db72);-webkit-background-clip:text;color:transparent}.hero p{display:inline-block;padding:9px 20px;border-radius:999px;background:#241333b8;color:#fff6dd}
+    .card{border-color:#ffe8b8;box-shadow:0 22px 55px #0008}.card:hover{box-shadow:0 28px 65px #0009}.card-image{background:#392154}.journey{background:#fffaf0;border-color:#ffe6b0;box-shadow:0 22px 55px #0007}
+    .maze-task{padding:10px 20px;border:0;background:linear-gradient(#ffd75b,#ffac34);color:#4f2d74;font-size:22px;box-shadow:0 6px 0 #dc8025}
+    .maze{grid-template-columns:repeat(9,1fr);gap:3px;max-width:500px;background:#643f91;border:5px solid #9d69df;border-radius:24px}.maze-cell{border-radius:8px;background:#fff2c9;font-size:0;overflow:hidden}.maze-cell.hero{font-size:31px;background:#ffe2a8}.maze-cell.wall{background:linear-gradient(#83cc5f,#4e9e42);box-shadow:inset 0 -4px #367536}.maze-cell.target{font-size:34px;background:#fffaf0;box-shadow:inset 0 0 0 2px #ffd76a}.maze-cell.target.goal{animation:targetGlow 1.2s ease-in-out infinite alternate}
+    .catch-stage{background:url('assets/catch-background.png') center/cover;box-shadow:0 12px 28px #2d53884d}.falling{top:-64px;width:62px;height:62px;display:grid;place-items:center;font-size:50px}.basket{width:96px;height:54px;font-size:60px;filter:drop-shadow(0 5px 4px #5d330966)}
   </style>
 </head>
 <body>
@@ -46,36 +54,263 @@
     const modal=document.querySelector('#game-modal'),area=document.querySelector('#game-area'),title=document.querySelector('#modal-title');
     const progress=JSON.parse(localStorage.getItem('little-english-progress')||'{}');
     const speak=word=>{if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang='en-US';u.rate=.72;speechSynthesis.speak(u)};
-    function refreshTrail(){let n=0;document.querySelectorAll('.milestone').forEach(el=>{const done=!!progress[el.dataset.m];el.classList.toggle('done',done);el.querySelector('small').textContent=done?'âœ“ Ğ”Ğ¾ÑÑ‚Ğ¸Ğ¶ĞµĞ½Ğ¸Ğµ Ğ¿Ğ¾Ğ»ÑƒÑ‡ĞµĞ½Ğ¾':el.dataset.m==='match'?'ĞŸÑ€Ğ¾Ğ¹Ğ´Ğ¸ Match & Learn':el.dataset.m==='arrows'?'ĞŸÑ€Ğ¾Ğ¹Ğ´Ğ¸ Arrow Adventure':'ĞŸÑ€Ğ¾Ğ¹Ğ´Ğ¸ Catch the Words';if(done)n++});document.querySelector('#star-count').textContent=n}
-    function achieve(game){if(!progress[game]){progress[game]=true;localStorage.setItem('little-english-progress',JSON.stringify(progress));refreshTrail();toast('â­ ĞĞ¾Ğ²Ğ¾Ğµ Ğ´Ğ¾ÑÑ‚Ğ¸Ğ¶ĞµĞ½Ğ¸Ğµ!')}}
-    function toast(msg){const el=document.querySelector('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-    document.querySelector('.close').onclick=()=>{stopCatch();modal.close()};modal.onclick=e=>{if(e.target===modal){stopCatch();modal.close()}};
-    document.querySelectorAll('[data-open]').forEach(el=>{el.onclick=()=>openGame(el.dataset.open);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openGame(el.dataset.open)}}});
-    function openGame(game){stopCatch();modal.showModal();game==='match'?startMatch():game==='arrows'?startArrows():startCatch()}
+    function refreshTrail(){let n=0;document.querySelectorAll('.milestone').forEach(el=>{const done=!!progress[el.dataset.m];el.classList.toggle('done',done);el.querySelector('smaluÓÎ­¢G§²ÚîÆ­y×OXÛÛÚWOÏÓX]™›ÛÜŠX]œ˜[™ÛJ
+JŠ_Y˜]ÓX]Ú
 
-    const fruits=[['ğŸ','apple'],['ğŸŒ','banana'],['ğŸ‡','grapes'],['ğŸ“','strawberry'],['ğŸŠ','orange'],['ğŸ«','blueberry']];let mb,sel,score,moves,busy;
-    function startMatch(){title.textContent='Match & Learn';score=0;moves=12;busy=false;sel=null;mb=Array.from({length:6},()=>Array.from({length:6},()=>Math.floor(Math.random()*6)));while(findMatches().size)mb=Array.from({length:6},()=>Array.from({length:6},()=>Math.floor(Math.random()*6)));drawMatch()}
-    function findMatches(){const s=new Set;for(let r=0;r<6;r++)for(let c=0;c<6;c++){if(c<4&&mb[r][c]===mb[r][c+1]&&mb[r][c]===mb[r][c+2]){let x=c;while(x<6&&mb[r][x]===mb[r][c])s.add(r+','+x++)}if(r<4&&mb[r][c]===mb[r+1][c]&&mb[r][c]===mb[r+2][c]){let y=r;while(y<6&&mb[y][c]===mb[r][c])s.add(y++ +','+c)}}return s}
-    function drawMatch(){area.innerHTML=`<p class="game-note">ĞĞ°Ğ¶Ğ¼Ğ¸ Ğ½Ğ° Ñ„Ñ€ÑƒĞºÑ‚, Ğ·Ğ°Ñ‚ĞµĞ¼ Ğ½Ğ° ÑĞ¾ÑĞµĞ´Ğ½Ğ¸Ğ¹. Ğ¡Ğ¾Ğ±ĞµÑ€Ğ¸ 3 Ğ¾Ğ´Ğ¸Ğ½Ğ°ĞºĞ¾Ğ²Ñ‹Ñ…!</p><div class="game-bar"><span class="pill">â­ ${score}</span><span class="pill">Ğ¥Ğ¾Ğ´Ñ‹: ${moves}</span></div><div id="match-board"></div>`;const b=area.querySelector('#match-board');mb.forEach((row,r)=>row.forEach((v,c)=>{const x=document.createElement('button');x.className='gem'+(sel&&sel.r===r&&sel.c===c?' selected':'');x.textContent=fruits[v][0];x.onclick=()=>pickGem(r,c);b.append(x)}))}
-    async function pickGem(r,c){if(busy||moves<=0)return;if(!sel){sel={r,c};drawMatch();return}const a=sel,d={r,c};sel=null;if(Math.abs(a.r-r)+Math.abs(a.c-c)!==1){sel=d;drawMatch();return}[mb[a.r][a.c],mb[r][c]]=[mb[r][c],mb[a.r][a.c]];let m=findMatches();if(!m.size){[mb[a.r][a.c],mb[r][c]]=[mb[r][c],mb[a.r][a.c]];toast('ĞŸĞ¾Ğ¿Ñ€Ğ¾Ğ±ÑƒĞ¹ Ğ´Ñ€ÑƒĞ³Ğ¾Ğ¹ Ñ…Ğ¾Ğ´!');drawMatch();return}moves--;busy=true;while(m.size){const first=[...m][0].split(',').map(Number);speak(fruits[mb[first[0]][first[1]]][1]);score+=m.size;m.forEach(k=>{const[q,w]=k.split(',').map(Number);mb[q][w]=null});for(let x=0;x<6;x++){const col=[];for(let y=5;y>=0;y--)if(mb[y][x]!=null)col.push(mb[y][x]);for(let y=5,i=0;y>=0;y--,i++)mb[y][x]=col[i]??Math.floor(Math.random()*6)}drawMatch();await new Promise(q=>setTimeout(q,300));m=findMatches()}busy=false;if(score>=12)achieve('match');if(moves===0&&score<12)toast('Ğ•Ñ‰Ñ‘ Ñ€Ğ°Ğ· â€” Ğ¿Ğ¾Ñ‡Ñ‚Ğ¸ Ğ¿Ğ¾Ğ»ÑƒÑ‡Ğ¸Ğ»Ğ¾ÑÑŒ!');drawMatch()}
+NØ]ØZ]™]È›ÛZ\ÙJOOœÙ][Y[İ]
+KÌ
+JNÛOYš[™X]Ú\Ê
+_X\ŞOY˜[ÙNÚYŠØÛÜ™OLLŠXXÚY]™J	ÛX]Ú	ÊNÚYŠ[İ™\ÏOOL	‰œØÛÜ™OLŠ]Ø\İ
+	ô%tbtdH4`4,4-È8 %4/ô/´aô`´.4/ô/´.ô`ôaô.4.ô/´`tcIÊNÙ˜]ÓX]Ú
 
-    const mazeMap=['1111111','1000001','1011101','1000101','1110101','1000001','1111111'];
-    const mazeWords=[['ğŸ','apple'],['ğŸ±','cat'],['â­','star'],['âš½','ball'],['ğŸš—','car'],['ğŸ“•','book']];
-    const mazeSpots=[[1,5],[3,1],[5,5]];let hero={r:1,c:1},mazeMoves=0,mazeRound=1,mazeTargets=[],mazeGoal=0,mazeLocked=false;
-    function startArrows(){title.textContent='Arrow Adventure';mazeRound=1;nextMazeRound()}
-    function nextMazeRound(){hero={r:1,c:1};mazeMoves=0;mazeLocked=false;const ids=[];while(ids.length<3){const i=Math.floor(Math.random()*mazeWords.length);if(!ids.includes(i))ids.push(i)}mazeTargets=ids.map((word,i)=>({word,pos:mazeSpots[i]}));mazeGoal=Math.floor(Math.random()*3);drawMaze();setTimeout(()=>speak('Find the '+mazeWords[mazeTargets[mazeGoal].word][1]),250)}
-    function drawMaze(){const goal=mazeWords[mazeTargets[mazeGoal].word];area.innerHTML=`<p class="game-note">Ğ£Ğ¿Ñ€Ğ°Ğ²Ğ»ÑĞ¹ ÑĞ¾Ğ²Ñ‘Ğ½ĞºĞ¾Ğ¼ Ğ¸ Ğ´Ğ¾Ğ¹Ğ´Ğ¸ Ğ´Ğ¾ ĞºĞ°Ñ€Ñ‚Ğ¸Ğ½ĞºĞ¸, ĞºĞ¾Ñ‚Ğ¾Ñ€ÑƒÑ Ğ½Ğ°Ğ·Ñ‹Ğ²Ğ°ĞµÑ‚ Ğ¸Ğ³Ñ€Ğ°.</p><button class="maze-task" id="maze-listen">ğŸ”Š Find the ${goal[1]}</button><div class="game-bar"><span class="pill">Ğ Ğ°ÑƒĞ½Ğ´: ${mazeRound} / 4</span><span class="pill">Ğ¥Ğ¾Ğ´Ñ‹: ${mazeMoves}</span></div><div class="maze"></div><div class="controls"><button class="arrow up" data-dir="up">â†‘</button><button class="arrow left" data-dir="left">â†</button><button class="arrow down" data-dir="down">â†“</button><button class="arrow right" data-dir="right">â†’</button></div>`;area.querySelector('#maze-listen').onclick=()=>speak('Find the '+goal[1]);const m=area.querySelector('.maze');for(let r=0;r<7;r++)for(let c=0;c<7;c++){const x=document.createElement('div'),item=mazeTargets.find(t=>t.pos[0]===r&&t.pos[1]===c);x.className='maze-cell'+(mazeMap[r][c]==='1'?' wall':'')+(item?' target':'');if(item)x.textContent=mazeWords[item.word][0];if(r===hero.r&&c===hero.c)x.textContent='ğŸ¦‰';m.append(x)}area.querySelectorAll('[data-dir]').forEach(b=>b.onclick=()=>moveHero(b.dataset.dir))}
-    function moveHero(dir){if(mazeLocked)return;const delta={up:[-1,0],down:[1,0],left:[0,-1],right:[0,1]}[dir],nr=hero.r+delta[0],nc=hero.c+delta[1];speak(dir);if(mazeMap[nr][nc]==='1'){toast('ğŸŒ¿ Ğ—Ğ´ĞµÑÑŒ ÑÑ‚ĞµĞ½Ğ°!');return}hero={r:nr,c:nc};mazeMoves++;const reached=mazeTargets.findIndex(t=>t.pos[0]===nr&&t.pos[1]===nc);if(reached>=0){mazeLocked=true;if(reached===mazeGoal){speak('Great! '+mazeWords[mazeTargets[reached].word][1]);toast('â­ ĞŸÑ€Ğ°Ğ²Ğ¸Ğ»ÑŒĞ½Ğ¾!');setTimeout(()=>{if(mazeRound++>=4){achieve('arrows');area.innerHTML='<div class="prompt">Maze Master! â­</div><p>Ğ¢Ñ‹ Ğ½Ğ°ÑˆÑ‘Ğ» Ğ²ÑĞµ Ñ‡ĞµÑ‚Ñ‹Ñ€Ğµ ĞºĞ°Ñ€Ñ‚Ğ¸Ğ½ĞºĞ¸!</p><button class="play" onclick="startArrows()">Play again</button>'}else nextMazeRound()},750)}else{speak('Try again');toast('Ğ­Ñ‚Ğ¾ Ğ´Ñ€ÑƒĞ³Ğ°Ñ ĞºĞ°Ñ€Ñ‚Ğ¸Ğ½ĞºĞ°. ĞŸĞ¾Ğ¿Ñ€Ğ¾Ğ±ÑƒĞ¹ ĞµÑ‰Ñ‘!');setTimeout(()=>{hero={r:1,c:1};mazeLocked=false;drawMaze()},650)}return}drawMaze()}
+_B‚ˆÛÛœİX^™SX\VÉÌLLLLLLIË	ÌLIË	ÌLLLLIË	ÌLLIË	ÌLLLLIË	ÌLIË	ÌLLLLLLI×NÂˆÛÛœİX^™UÛÜ™ÏVÖÉü'ãc‰Ë	Ø\I×KÉü'ä,IË	ØØ]	×KÉø«d	Ë	Üİ\‰×KÉø¦¯IË	Ø˜[	×KÉü'æ¥ÉË	ØØ\‰×KÉü'äåIË	Ø›ÛÚÉ×WNÂˆÛÛœİX^™TÜİÏVÖÌKWKÌËWKÍKWWNÛ]\›Ï^ÜŒKÎŒ_KX^™S[İ™\ÏLX^™T›İ[™LKX^™U\™Ù]ÏV×KX^™QÛØ[LX^™SØÚÙYY˜[ÙNÂˆ[˜İ[Ûˆİ\\œ›İÜÊ
+^İ]K^ÛÛ[IĞ\œ›İÈY™[\™IÎÛX^™T›İ[™LNÛ™^X^™T›İ[™
 
-    const catchItems=[['ğŸ','apple'],['ğŸŒ','banana'],['ğŸ‡','grapes'],['â˜•','cup'],['â­','star'],['ğŸ“•','book']];let catchTarget=0,catchScore=0,lives=3,basketX=220,fallers=[],catchRaf=0,lastSpawn=0,catchRunning=false;
-    function startCatch(){stopCatch();title.textContent='Catch the Words';catchTarget=Math.floor(Math.random()*catchItems.length);catchScore=0;lives=3;basketX=220;fallers=[];area.innerHTML=`<p class="game-note">Ğ›Ğ¾Ğ²Ğ¸ Ñ‚Ğ¾Ğ»ÑŒĞºĞ¾ Ğ½Ğ°Ğ·Ğ²Ğ°Ğ½Ğ½Ñ‹Ğ¹ Ğ¿Ñ€ĞµĞ´Ğ¼ĞµÑ‚. Ğ£Ğ¿Ñ€Ğ°Ğ²Ğ»ĞµĞ½Ğ¸Ğµ: â† â†’ Ğ¸Ğ»Ğ¸ ĞºĞ½Ğ¾Ğ¿ĞºĞ¸.</p><div class="game-bar"><button class="pill" id="catch-word">ğŸ”Š Catch: ${catchItems[catchTarget][1]}</button><span class="pill" id="catch-score">â­ 0 / 8</span><span class="pill" id="catch-lives">â¤ï¸â¤ï¸â¤ï¸</span></div><div class="catch-stage"><div class="basket">ğŸ§º</div></div><div class="catch-controls"><button data-move="left">â†</button><button data-move="right">â†’</button></div>`;area.querySelector('#catch-word').onclick=()=>speak(catchItems[catchTarget][1]);area.querySelectorAll('[data-move]').forEach(b=>{b.onpointerdown=()=>moveBasket(b.dataset.move==='left'?-38:38)});catchRunning=true;lastSpawn=performance.now();speak('Catch '+catchItems[catchTarget][1]);catchRaf=requestAnimationFrame(catchLoop)}
-    function moveBasket(dx){basketX=Math.max(0,Math.min(468,basketX+dx));const b=area.querySelector('.basket');if(b)b.style.left=basketX+'px'}
-    function spawnItem(){const stage=area.querySelector('.catch-stage');if(!stage)return;const index=Math.random()<.42?catchTarget:Math.floor(Math.random()*catchItems.length),el=document.createElement('div');el.className='falling';el.textContent=catchItems[index][0];const x=Math.random()*500;el.style.left=x+'px';stage.append(el);fallers.push({el,index,x,y:-55,speed:1.9+Math.random()*1.35})}
-    function catchLoop(now){if(!catchRunning)return;if(now-lastSpawn>780){spawnItem();lastSpawn=now}const basketTop=330;for(let i=fallers.length-1;i>=0;i--){const f=fallers[i];f.y+=f.speed;f.el.style.transform=`translateY(${f.y}px)`;if(f.y>basketTop&&f.y<375&&f.x+35>basketX&&f.x<basketX+92){if(f.index===catchTarget){catchScore++;speak(catchItems[f.index][1]);catchTarget=Math.floor(Math.random()*catchItems.length);const w=area.querySelector('#catch-word');if(w)w.textContent='ğŸ”Š Catch: '+catchItems[catchTarget][1]}else{lives--;speak('Oops')}f.el.remove();fallers.splice(i,1);updateCatch();continue}if(f.y>395){f.el.remove();fallers.splice(i,1)}}catchRaf=requestAnimationFrame(catchLoop)}
-    function updateCatch(){const s=area.querySelector('#catch-score'),l=area.querySelector('#catch-lives');if(s)s.textContent='â­ '+catchScore+' / 8';if(l)l.textContent='â¤ï¸'.repeat(Math.max(0,lives));if(catchScore>=8){stopCatch();achieve('catch');speak('Super catcher');area.innerHTML='<div class="prompt">Super catcher! ğŸ§º</div><p>Ğ¢Ñ‹ Ğ¿Ğ¾Ğ¹Ğ¼Ğ°Ğ» Ğ²ÑĞµ Ğ°Ğ½Ğ³Ğ»Ğ¸Ğ¹ÑĞºĞ¸Ğµ ÑĞ»Ğ¾Ğ²Ğ°!</p><button class="play" onclick="startCatch()">Play again</button>'}else if(lives<=0){stopCatch();area.innerHTML='<div class="prompt">Good try! ğŸŒˆ</div><p>ĞŸĞ¾Ğ¿Ñ€Ğ¾Ğ±ÑƒĞ¹ ĞµÑ‰Ñ‘ Ñ€Ğ°Ğ· Ğ¸ Ğ»Ğ¾Ğ²Ğ¸ Ñ‚Ğ¾Ğ»ÑŒĞºĞ¾ Ğ½ÑƒĞ¶Ğ½Ñ‹Ğµ Ğ¿Ñ€ĞµĞ´Ğ¼ĞµÑ‚Ñ‹.</p><button class="play" onclick="startCatch()">Play again</button>'}}
-    function stopCatch(){catchRunning=false;if(catchRaf)cancelAnimationFrame(catchRaf);catchRaf=0;fallers.forEach(f=>f.el.remove());fallers=[]}
-    document.addEventListener('keydown',e=>{if(!modal.open)return;if(title.textContent==='Arrow Adventure'&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();moveHero(e.key.replace('Arrow','').toLowerCase())}if(title.textContent==='Catch the Words'&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){e.preventDefault();moveBasket(e.key==='ArrowLeft'?-38:38)}});
-    refreshTrail();
-  </script>
-</body>
-</html>
+_Bˆ[˜İ[Ûˆ™^X^™T›İ[™
+
+^Ú\›Ï^ÜŒKÎŒ_NÛX^™S[İ™\ÏLÛX^™SØÚÙYY˜[ÙNØÛÛœİYÏV×NİÚ[JYË›[™İÊ^ØÛÛœİOSX]™›ÛÜŠX]œ˜[™ÛJ
+J›X^™UÛÜ™Ë›[™İ
+NÚYŠZYËš[˜ÛY\ÊJJZYËœ\Ú
+J_[X^™U\™Ù]ÏZYË›X\
+
+ÛÜ™JOOŠİÛÜ™ÜÎ›X^™TÜİÖÚW_JJNÛX^™QÛØ[SX]™›ÛÜŠX]œ˜[™ÛJ
+JŒÊNÙ˜]ÓX^™J
+NÜÙ][Y[İ]
+
+
+OOœÜXZÊ	Ñš[™H	ÊÛX^™UÛÜ™ÖÛX^™U\™Ù]ÖÛX^™QÛØ[KÛÜ™VÌWJKL
+_Bˆ[˜İ[Ûˆ˜]ÓX^™J
+^ØÛÛœİÛØ[[X^™UÛÜ™ÖÛX^™U\™Ù]ÖÛX^™QÛØ[KÛÜ™NØ\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´(ô/ô`4,4,´.ôcô.H4`t/´,´dt/t.´/´/4.4-4/´.t-4.4-4/ˆ4.´,4`4`´.4/t.´.4.´/´`´/´`4`ôcˆ4/t,4-ôbô,´,4-t`ˆ4.4,ô`4,Ü]ÛˆÛ\ÜÏH›X^™K]\ÚÈˆYH›X^™K[\İ[ˆ¼'å"ˆš[™H	ÙÛØ[ÌW_OØ]Û]ˆÛ\ÜÏH™Ø[YKX˜\ˆÜ[ˆÛ\ÜÏHœ[´(4,4`ô/t-ˆ	ÛX^™T›İ[™HÈÜÜ[Ü[ˆÛ\ÜÏHœ[´)t/´-4bÎˆ	ÛX^™S[İ™\ßOÜÜ[Ù]]ˆÛ\ÜÏH›X^™HÙ]]ˆÛ\ÜÏH˜ÛÛ›ÛÈ]ÛˆÛ\ÜÏH˜\œ›İÈ\ˆ]KY\H\¸¡¤OØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈYˆ]KY\H›Y¸¡¤Ø]Û]ÛˆÛ\ÜÏH˜\œ›İÈİÛˆˆ]KY\H™İÛˆ¸¡¤ÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈšYÚˆ]KY\HœšYÚ¸¡¤Ø]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈÛX^™K[\İ[‰ÊK›Û˜ÛXÚÏJ
+OOœÜXZÊ	Ñš[™H	ÊÙÛØ[ÌWJNØÛÛœİOX\™XKœ]Y\TÙ[XİÜŠ	Ë›X^™IÊNÙ›ÜŠ]LÜÎÜŠÊÊY›ÜŠ]ÏLØÏÎØÊÊÊ^ØÛÛœİYØİ[Y[˜Ü™X]Q[[Y[
+	Ù]‰ÊK][O[X^™U\™Ù]Ë™š[™
+OœÜÖÌOOO\‰‰œÜÖÌWOOOXÊNŞ˜Û\ÜÓ˜[YOIÛX^™KXÙ[	ÊÊX^™SX\Ü—VØ×OOOIÌIÏÉÈØ[	Î‰ÉÊJÊ][OÉÈ\™Ù]	Î‰ÉÊNÚYŠ][J^^ÛÛ[[X^™UÛÜ™ÖÚ][KÛÜ™VÌNÚYŠOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜Ê^^ÛÛ[Iü'é¢IÎÛK˜\[™
+
+_X\™XKœ]Y\TÙ[XİÜ[
+	ÖÙ]KY\—IÊK™›Ü‘XXÚ
+O˜‹›Û˜ÛXÚÏJ
+OO›[İ™R\›Ê‹™]\Ù]™\ŠJ_Bˆ[˜İ[Ûˆ[İ™R\›Ê\Š^ÚYŠX^™SØÚÙY
+\™]\›ØÛÛœİ[O^İ\–ËLKKİÛ–ÌKKY–ÌLWKšYÚ–ÌW_VÙ\—KœZ\›ËœŠÙ[VÌK˜ÏZ\›Ë˜ÊÙ[VÌWNÜÜXZÊ\ŠNÚYŠX^™SX\Ûœ—VÛ˜×OOOIÌIÊ^İØ\İ
+	ü'ã/È4%ô-4-t`tc4`t`´-t/t,IÊNÜ™]\›ŸZ\›Ï^Ü›œ‹Î›˜ßNÛX^™S[İ™\ÊÊÎØÛÛœİ™XXÚY[X^™U\™Ù]Ë™š[™[™^
+OœÜÖÌOOO[œ‰‰œÜÖÌWOOO[˜ÊNÚYŠ™XXÚYL
+^ÛX^™SØÚÙY]YNÚYŠ™XXÚYOO[X^™QÛØ[
+^ÜÜXZÊ	ÑÜ™X]H	ÊÛX^™UÛÜ™ÖÛX^™U\™Ù]ÖÜ™XXÚYKÛÜ™VÌWJNİØ\İ
+	ø«d4'ô`4,4,´.4.ôc4/t/ˆIÊNÜÙ][Y[İ]
+
+
+OOÚYŠX^™T›İ[™
+ÊÏM
+^ØXÚY]™J	Ø\œ›İÜÉÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\“X^™HX\İ\ˆH8«dÙ]´(´bÈ4/t,4b4dt.È4,´`t-H4aô-t`´bô`4-H4.´,4`4`´.4/t.´.OÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\\œ›İÜÊ
+H”^HYØZ[Ø]Û‰ßY[ÙH™^X^™T›İ[™
+
+_KÍL
+_Y[Ù^ÜÜXZÊ	ÕHYØZ[‰ÊNİØ\İ
+	ô+t`´/ˆ4-4`4`ô,ô,4cÈ4.´,4`4`´.4/t.´,ˆ4'ô/´/ô`4/´,t`ô.H4-tbtdHIÊNÜÙ][Y[İ]
+
+
+OOÚ\›Ï^ÜŒKÎŒ_NÛX^™SØÚÙYY˜[ÙNÙ˜]ÓX^™J
+_KL
+_\™]\›ŸY˜]ÓX^™J
+_B‚ˆÛÛœİØ]Ú][\ÏVÖÉü'ãc‰Ë	Ø\I×KÉü'ãc	Ë	Ø˜[˜[˜I×KÉü'ãaÉË	ÙÜ˜\\É×KÉø¦%IË	Øİ\	×KÉø«d	Ë	Üİ\‰×KÉü'äåIË	Ø›ÛÚÉ×WNÛ]Ø]Ú\™Ù]LØ]ÚØÛÜ™OL]™\ÏLË˜\ÚÙ]LŒŒ˜[\œÏV×KØ]Ú˜YL\İÜ]ÛLØ]Ú[›š[™ÏY˜[ÙNÂˆ[˜İ[Ûˆİ\Ø]Ú
+
+^ÜİÜØ]Ú
+
+Nİ]K^ÛÛ[IĞØ]ÚHÛÜ™ÉÎØØ]Ú\™Ù]SX]™›ÛÜŠX]œ˜[™ÛJ
+J˜Ø]Ú][\Ë›[™İ
+NØØ]ÚØÛÜ™OLÛ]™\ÏLÎØ˜\ÚÙ]LŒŒÙ˜[\œÏV×NØ\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´&ô/´,´.4`´/´.ôc4.´/ˆ4/t,4-ô,´,4/t/tbô.H4/ô`4-t-4/4-t`‹ˆ4(ô/ô`4,4,´.ô-t/t.4-Nˆ8¡¤8¡¤ˆ4.4.ô.4.´/t/´/ô.´.Ü]ˆÛ\ÜÏH™Ø[YKX˜\ˆ]ÛˆÛ\ÜÏHœ[ˆYH˜Ø]Ú]ÛÜ™¼'å"ˆØ]Úˆ	ØØ]Ú][\ÖØØ]Ú\™Ù]VÌW_OØ]ÛÜ[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú\ØÛÜ™H¸«dÈÜÜ[Ü[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú[]™\È¸§i;î#ø§i;î#ø§i;î#ÏÜÜ[Ù]]ˆÛ\ÜÏH˜Ø]Ú\İYÙH]ˆÛ\ÜÏH˜˜\ÚÙ]¼'éîÙ]Ù]]ˆÛ\ÜÏH˜Ø]ÚXÛÛ›ÛÈ]Ûˆ]K[[İ™OH›Y¸¡¤Ø]Û]Ûˆ]K[[İ™OHœšYÚ¸¡¤Ø]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊK›Û˜ÛXÚÏJ
+OOœÜXZÊØ]Ú][\ÖØØ]Ú\™Ù]VÌWJNØ\™XKœ]Y\TÙ[XİÜ[
+	ÖÙ]K[[İ™WIÊK™›Ü‘XXÚ
+OØ‹›ÛœÚ[\™İÛJ
+OO›[İ™P˜\ÚÙ]
+‹™]\Ù]›[İ™OOOIÛY	ÏËLÎŒÎ
+_JNØØ]Ú[›š[™Ï]YNÛ\İÜ]Û\\™›Ü›X[˜ÙK››İÊ
+NÜÜXZÊ	ĞØ]Ú	ÊØØ]Ú][\ÖØØ]Ú\™Ù]VÌWJNØØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
+_Bˆ[˜İ[Ûˆ[İ™P˜\ÚÙ]
+
+^Ø˜\ÚÙ]SX]›X^
+X]›Z[Š˜\ÚÙ]
+Ù
+JNØÛÛœİX\™XKœ]Y\TÙ[XİÜŠ	Ë˜˜\ÚÙ]	ÊNÚYŠŠX‹œİ[K›YX˜\ÚÙ]
+ÉÜ	ßBˆ[˜İ[ÛˆÜ]Û’][J
+^ØÛÛœİİYÙOX\™XKœ]Y\TÙ[XİÜŠ	Ë˜Ø]Ú\İYÙIÊNÚYŠ\İYÙJ\™]\›ØÛÛœİ[™^SX]œ˜[™ÛJ
+OØØ]Ú\™Ù]“X]™›ÛÜŠX]œ˜[™ÛJ
+J˜Ø]Ú][\Ë›[™İ
+K[YØİ[Y[˜Ü™X]Q[[Y[
+	Ù]‰ÊNÙ[˜Û\ÜÓ˜[YOIÙ˜[[™ÉÎÙ[^ÛÛ[XØ]Ú][\ÖÚ[™^VÌNØÛÛœİSX]œ˜[™ÛJ
+JLÙ[œİ[K›Y^
+ÉÜ	ÎÜİYÙK˜\[™
+[
+NÙ˜[\œËœ\Ú
+Ù[[™^N‹MMKÜYYŒKJÓX]œ˜[™ÛJ
+JŒKŒÍ_J_Bˆ[˜İ[ÛˆØ]ÚÛÜ
+›İÊ^ÚYŠXØ]Ú[›š[™Ê\™]\›ÚYŠ›İË[\İÜ]ÛÎ
+^ÜÜ]Û’][J
+NÛ\İÜ]Û[›İßXÛÛœİ˜\ÚÙ]ÜLÌÌÙ›ÜŠ]OY˜[\œË›[™İLNÚOLÚKKJ^ØÛÛœİY˜[\œÖÚWNÙ‹JÏY‹œÜYYÙ‹™[œİ[K˜[œÙ›Ü›OX˜[œÛ]VJ	Ù‹_\
+XÚYŠ‹O˜˜\ÚÙ]Ü	‰™‹OÍÍI‰™‹
+ÌÍO˜˜\ÚÙ]	‰™‹˜\ÚÙ]
+ÎLŠ^ÚYŠ‹š[™^OOXØ]Ú\™Ù]
+^ØØ]ÚØÛÜ™JÊÎÜÜXZÊØ]Ú][\ÖÙ‹š[™^VÌWJNØØ]Ú\™Ù]SX]™›ÛÜŠX]œ˜[™ÛJ
+J˜Ø]Ú][\Ë›[™İ
+NØÛÛœİÏX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊNÚYŠÊ]Ë^ÛÛ[Iü'å"ˆØ]Úˆ	ÊØØ]Ú][\ÖØØ]Ú\™Ù]VÌW_Y[Ù^Û]™\ËKNÜÜXZÊ	ÓÛÜÉÊ_Y‹™[œ™[[İ™J
+NÙ˜[\œËœÜXÙJKJNİ\]PØ]Ú
+
+NØÛÛ[Y_ZYŠ‹OŒÎMJ^Ù‹™[œ™[[İ™J
+NÙ˜[\œËœÜXÙJKJ__XØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
+_Bˆ[˜İ[Ûˆ\]PØ]Ú
+
+^ØÛÛœİÏX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú\ØÛÜ™IÊKX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú[]™\ÉÊNÚYŠÊ\Ë^ÛÛ[Iø«d	ÊØØ]ÚØÛÜ™JÉÈÈ	ÎÚYŠ
+[^ÛÛ[Iø§i;î#ÉËœ™\X]
+X]›X^
+]™\ÊJNÚYŠØ]ÚØÛÜ™ON
+^ÜİÜØ]Ú
+
+NØXÚY]™J	ØØ]Ú	ÊNÜÜXZÊ	Ôİ\\ˆØ]Ú\‰ÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\”İ\\ˆØ]Ú\ˆH<'éîÙ]´(´bÈ4/ô/´.t/4,4.È4,´`t-H4,4/t,ô.ô.4.t`t.´.4-H4`t.ô/´,´,OÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
+
+H”^HYØZ[Ø]Û‰ßY[ÙHYŠ]™\ÏL
+^ÜİÜØ]Ú
+
+NØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\‘ÛÛÙHH<'ã"Ù]´'ô/´/ô`4/´,t`ô.H4-tbtdH4`4,4-È4.4.ô/´,´.4`´/´.ôc4.´/ˆ4/t`ô-´/tbô-H4/ô`4-t-4/4-t`´bËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
+
+H”^HYØZ[Ø]Û‰ß_Bˆ[˜İ[ÛˆİÜØ]Ú
+
+^ØØ]Ú[›š[™ÏY˜[ÙNÚYŠØ]Ú˜YŠXØ[˜Ù[[š[X][Û‘œ˜[YJØ]Ú˜YŠNØØ]Ú˜YLÙ˜[\œË™›Ü‘XXÚ
+O™‹™[œ™[[İ™J
+JNÙ˜[\œÏV×_BˆØİ[Y[˜Y]™[\İ[™\Š	ÚÙ^YİÛ‰ËOOÚYŠ[[Ù[›Ü[Š\™]\›ÚYŠ]K^ÛÛ[OOIĞ\œ›İÈY™[\™IÉ‰–ÉĞ\œ›İÕ\	Ë	Ğ\œ›İÑİÛ‰Ë	Ğ\œ›İÓY	Ë	Ğ\œ›İÔšYÚ	×Kš[˜ÛY\ÊKšÙ^JJ^ÙKœ™]™[Y˜][
+
+NÛ[İ™R\›ÊKšÙ^Kœ™\XÙJ	Ğ\œ›İÉË	ÉÊKÓİÙ\Ø\ÙJ
+J_ZYŠ]K^ÛÛ[OOIĞØ]ÚHÛÜ™ÉÉ‰ŠKšÙ^OOOIĞ\œ›İÓY	ßKšÙ^OOOIĞ\œ›İÔšYÚ	ÊJ^ÙKœ™]™[Y˜][
+
+NÛ[İ™P˜\ÚÙ]
+KšÙ^OOOIĞ\œ›İÓY	ÏËLÎŒÎ
+__JNÂˆÊˆš[˜[Ø[YHYXÚ[šXÜÎˆİX›HX^™Hœ˜[˜Ú\È[™[XYÙKX˜\ÙYØ]Ú\ˆ
+‹ÂˆÛÛœİX^™SX\š[˜[VÉÌLLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLIË	ÌLLLLLLLLI×NÂˆÛÛœİX^™P[š[X[ÏVŞÛ˜[YN‰ÙÙÉËŞ[X›Û‰×^ÌQÍŸIßKÛ˜[YN‰ØØ]	ËŞ[X›Û‰×^ÌQÌ_IßKÛ˜[YN‰Ü˜X˜š]	ËŞ[X›Û‰×^ÌQÌIßWNÂˆÛÛœİX^™Q[™ÏVÖÌKKÌËWKÌË×KÍËWNÛ]X^™P[š[X[ÓÛ›Ø\™V×KX^™UØ[YIÙÙÉÎÂˆ[˜İ[ÛˆÚY™›Y
+\İ
+^Ü™]\›ˆË‹‹›\İKœÛÜ
+
+
+OO“X]œ˜[™ÛJ
+KKJ_Bˆ[˜İ[Ûˆİ\\œ›İÜÊ
+^İ]K^ÛÛ[IĞ\œ›İÈY™[\™IÎÛX^™T›İ[™LNÛ™^X^™T›İ[™
+
+_Bˆ[˜İ[Ûˆ™^X^™T›İ[™
+
+^Ú\›Ï^ÜŒËÎNÛX^™S[İ™\ÏLÛX^™SØÚÙYY˜[ÙNØÛÛœİXÙ\Ï\ÚY™›Y
+X^™Q[™ÊKœÛXÙJÊK[š[X[Ï\ÚY™›Y
+X^™P[š[X[ÊNÛX^™P[š[X[ÓÛ›Ø\™X[š[X[Ë›X\
+
+[š[X[JOOŠØ[š[X[ÜÎœXÙ\ÖÚW_JJNÛX^™UØ[Y[X^™P[š[X[ÖÊX^™T›İ[™LJI[X^™P[š[X[Ë›[™İK›˜[YNÙ˜]ÓX^™J
+NÜÙ][Y[İ]
+
+
+OOœÜXZÊ	Ñš[™H	ÊÛX^™UØ[Y
+KÌ
+_Bˆ[˜İ[Ûˆ˜]ÓX^™J
+^Ø\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´&´,4`4`´.4/t.´.4`t`´/´cô`ˆ4,ˆ4/´`´-4-t.ôc4/tbôaH4`´`ô/ô.4.´,4aH4.4/t-H4/ô-t`4-t.´`4bô,´,4c´`ˆ4-4/´`4/´,ô`ËÜ]ÛˆÛ\ÜÏH›X^™K]\ÚÈˆYH›X^™K[\İ[ˆ‰ˆÌLÈš[™H	ÛX^™UØ[YOØ]Û]ˆÛ\ÜÏH™Ø[YKX˜\ˆÜ[ˆÛ\ÜÏHœ[´(4,4`ô/t-ˆ	ÛX^™T›İ[™HÈÜÜ[Ü[ˆÛ\ÜÏHœ[´)t/´-4bÎˆ	ÛX^™S[İ™\ßOÜÜ[Ù]]ˆÛ\ÜÏH›X^™HÙ]]ˆÛ\ÜÏH˜ÛÛ›ÛÈ]ÛˆÛ\ÜÏH˜\œ›İÈ\ˆ]KY\H\‰X\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈYˆ]KY\H›Y‰›\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈİÛˆˆ]KY\H™İÛˆ‰™\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈšYÚˆ]KY\HœšYÚ‰œ˜\œÏØ]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈÛX^™K[\İ[‰ÊK›Û˜ÛXÚÏJ
+OOœÜXZÊ	Ñš[™H	ÊÛX^™UØ[Y
+NØÛÛœİOX\™XKœ]Y\TÙ[XİÜŠ	Ë›X^™IÊNÙ›ÜŠ]LÜNÜŠÊÊY›ÜŠ]ÏLØÏNØÊÊÊ^ØÛÛœİÙ[YØİ[Y[˜Ü™X]Q[[Y[
+	Ù]‰ÊK][O[X^™P[š[X[ÓÛ›Ø\™™š[™
+OœÜÖÌOOO\‰‰œÜÖÌWOOOXÊNØÙ[˜Û\ÜÓ˜[YOIÛX^™KXÙ[	ÊÊX^™SX\š[˜[Ü—VØ×OOOIÌIÏÉÈØ[	Î‰ÉÊJÊ][OÉÈ\™Ù]	Î‰ÉÊJÊ][OË˜[š[X[›˜[YOOO[X^™UØ[YÉÈÛØ[	Î‰ÉÊJÊOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÏÉÈ\›ÉÎ‰ÉÊNÚYŠ][J^ØÛÛœİ[YÏYØİ[Y[˜Ü™X]Q[[Y[
+	Ú[YÉÊNÚ[YËœÜ˜ÏZ][K˜[š[X[œÜ˜ÎÚ[YË˜[Z][K˜[š[X[›˜[YNØÙ[˜\[™
+[YÊ_ZYŠOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÊXÙ[š[›™\’SIÉˆÌLMMÎÉÎÛK˜\[™
+Ù[
+_X\™XKœ]Y\TÙ[XİÜ[
+	ÖÙ]KY\—IÊK™›Ü‘XXÚ
+O˜‹›Û˜ÛXÚÏJ
+OO›[İ™R\›Ê‹™]\Ù]™\ŠJ_Bˆ[˜İ[Ûˆ[İ™R\›Ê\Š^ÚYŠX^™SØÚÙY
+\™]\›ØÛÛœİ^İ\–ËLKKİÛ–ÌKKY–ÌLWKšYÚ–ÌW_VÙ\—KœZ\›ËœŠÙÌK˜ÏZ\›Ë˜ÊÙÌWNÜÜXZÊ\ŠNÚYŠœœ˜Ï˜ÏX^™SX\š[˜[Ûœ—VÛ˜×OOOIÌIÊ^İØ\İ
+	ô%ô-4-t`tc4/t-t`ˆ4-4/´`4/´-´.´.	ÊNÜ™]\›ŸZ\›Ï^Ü›œ‹Î›˜ßNÛX^™S[İ™\ÊÊÎØÛÛœİ™XXÚY[X^™P[š[X[ÓÛ›Ø\™™š[™
+OœÜÖÌOOO[œ‰‰œÜÖÌWOOO[˜ÊNÚYŠ™XXÚYË˜[š[X[›˜[YOOO[X^™UØ[Y
+^ÛX^™SØÚÙY]YNÜÜXZÊ	ÑÜ™X]H	ÊÛX^™UØ[Y
+NİØ\İ
+	ô'ô`4,4,´.4.ôc4/t/ˆIÊNÜÙ][Y[İ]
+
+
+OOÚYŠX^™T›İ[™
+ÊÏM
+^ØXÚY]™J	Ø\œ›İÜÉÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\“X^™HX\İ\ˆOÙ]´$´`t-H4aô-t`´bô`4-H4a´-t.ô.4/t,4.t-4-t/tbËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\\œ›İÜÊ
+H”^HYØZ[Ø]Û‰ßY[ÙH™^X^™T›İ[™
+
+_KÍL
+NÜ™]\›ŸZYŠ™XXÚY
+^ÜÜXZÊ	ÕHYØZ[‹ˆš[™H	ÊÛX^™UØ[Y
+NİØ\İ
+	ô+t`´/ˆ	ÊÜ™XXÚY˜[š[X[›˜[YJÉËˆ4&4bt.	ÊÛX^™UØ[Y
+_Y˜]ÓX^™J
+_B‚ˆÛÛœİØ]Ú][\Ñš[˜[VŞÛ˜[YN‰Ø\IËŞ[X›Û‰×^ÌQŒÍ_IßKÛ˜[YN‰Ø˜[˜[˜IËŞ[X›Û‰×^ÌQŒÍßIßKÛ˜[YN‰Ø˜[	ËŞ[X›Û‰×^Ì‘IßKÛ˜[YN‰Øİ\	ËŞ[X›Û‰×^ÌŒM_IßKÛ˜[YN‰ØØ\‰ËŞ[X›Û‰×^ÌQMßIßKÛ˜[YN‰ÚÚ]IËŞ[X›Û‰×^ÌQN_IßWNÂˆ[˜İ[Ûˆ[››İ[˜ÙPØ]Ú
+
+^ØÛÛœİÛÜ™XØ]Ú][\Ñš[˜[ØØ]Ú\™Ù]K›˜[YNØÛÛœİ]ÛX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊNÚYŠ]ÛŠX]Û‹^ÛÛ[IÓ\İ[ˆØ]ÚH	ÊİÛÜ™ÜÙ][Y[İ]
+
+
+OOœÜXZÊ	ĞØ]ÚH	ÊİÛÜ™
+KN
+_Bˆ[˜İ[Ûˆİ\Ø]Ú
+
+^ÜİÜØ]Ú
+
+Nİ]K^ÛÛ[IĞØ]ÚHÛÜ™ÉÎØØ]Ú\™Ù]SX]™›ÛÜŠX]œ˜[™ÛJ
+J˜Ø]Ú][\Ñš[˜[›[™İ
+NØØ]ÚØÛÜ™OLÛ]™\ÏLÎØ˜\ÚÙ]LŒŒÙ˜[\œÏV×NØ\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´(t.ô`ôb4,4.H4-ô,4-4,4/t.4-H4.4.ô/´,´.4`´/´.ôc4.´/ˆ4/t`ô-´/t`ôcˆ4.´,4`4`´.4/t.´`ËÜ]ˆÛ\ÜÏH™Ø[YKX˜\ˆ]ÛˆÛ\ÜÏHœ[ˆYH˜Ø]Ú]ÛÜ™Ø]ÛÜ[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú\ØÛÜ™H”ØÛÜ™NˆÈÜÜ[Ü[ˆÛ\ÜÏHœ[ˆYH˜Ø]Ú[]™\È“]™\ÎˆÏÜÜ[Ù]]ˆÛ\ÜÏH˜Ø]Ú\İYÙH]ˆÛ\ÜÏH˜˜\ÚÙ]‰ˆÌLMLÌÏÙ]Ù]]ˆÛ\ÜÏH˜Ø]ÚXÛÛ›ÛÈ]Ûˆ]K[[İ™OH›Y‰›\œÏØ]Û]Ûˆ]K[[İ™OHœšYÚ‰œ˜\œÏØ]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú]ÛÜ™	ÊK›Û˜ÛXÚÏX[››İ[˜ÙPØ]ÚØ\™XKœ]Y\TÙ[XİÜ[
+	ÖÙ]K[[İ™WIÊK™›Ü‘XXÚ
+O˜‹›ÛœÚ[\™İÛJ
+OO›[İ™P˜\ÚÙ]
+‹™]\Ù]›[İ™OOOIÛY	ÏËLÎŒÎ
+JNØØ]Ú[›š[™Ï]YNÛ\İÜ]Û\\™›Ü›X[˜ÙK››İÊ
+NØ[››İ[˜ÙPØ]Ú
+
+NØØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
+_Bˆ[˜İ[ÛˆÜ]Û’][J
+^ØÛÛœİİYÙOX\™XKœ]Y\TÙ[XİÜŠ	Ë˜Ø]Ú\İYÙIÊNÚYŠ\İYÙJ\™]\›ØÛÛœİ[™^SX]œ˜[™ÛJ
+OØØ]Ú\™Ù]“X]™›ÛÜŠX]œ˜[™ÛJ
+J˜Ø]Ú][\Ñš[˜[›[™İ
+K[YØİ[Y[˜Ü™X]Q[[Y[
+	Ù]‰ÊNÙ[˜Û\ÜÓ˜[YOIÙ˜[[™ÉÎÙ[^ÛÛ[XØ]Ú][\Ñš[˜[Ú[™^KœŞ[X›ÛØÛÛœİSX]œ˜[™ÛJ
+JLÙ[œİ[K›Y^
+ÉÜ	ÎÜİYÙK˜\[™
+[
+NÙ˜[\œËœ\Ú
+Ù[[™^N‹MÜYYŒK
+ÓX]œ˜[™ÛJ
+JŒKŒŸJ_Bˆ[˜İ[ÛˆØ]ÚÛÜ
+›İÊ^ÚYŠXØ]Ú[›š[™Ê\™]\›ÚYŠ›İË[\İÜ]ÛL
+^ÜÜ]Û’][J
+NÛ\İÜ]Û[›İßY›ÜŠ]OY˜[\œË›[™İLNÚOLÚKKJ^ØÛÛœİY˜[\œÖÚWNÙ‹JÏY‹œÜYYÙ‹™[œİ[K˜[œÙ›Ü›OX˜[œÛ]VJ	Ù‹_\
+XÚYŠ‹OŒÌŒ	‰™‹OÍÍI‰™‹
+ÍMO˜˜\ÚÙ]	‰™‹˜\ÚÙ]
+ÎMŠ^ÚYŠ‹š[™^OOXØ]Ú\™Ù]
+^ØØ]ÚØÛÜ™JÊÎÜÜXZÊ	ÑÜ™X]H	ÊØØ]Ú][\Ñš[˜[Ù‹š[™^K›˜[YJNÛ]™^ÙÈ™^SX]™›ÛÜŠX]œ˜[™ÛJ
+J˜Ø]Ú][\Ñš[˜[›[™İ
+NİÚ[J™^OOXØ]Ú\™Ù]
+NØØ]Ú\™Ù][™^Ø[››İ[˜ÙPØ]Ú
+
+_Y[Ù^Û]™\ËKNÜÜXZÊ	ÓÛÜËˆØ]ÚH	ÊØØ]Ú][\Ñš[˜[ØØ]Ú\™Ù]K›˜[YJ_Y‹™[œ™[[İ™J
+NÙ˜[\œËœÜXÙJKJNİ\]PØ]Ú
+
+NØÛÛ[Y_ZYŠ‹O
+^Ù‹™[œ™[[İ™J
+NÙ˜[\œËœÜXÙJKJ__XØ]Ú˜Y\™\]Y\İ[š[X][Û‘œ˜[YJØ]ÚÛÜ
+_Bˆ[˜İ[Ûˆ\]PØ]Ú
+
+^ØÛÛœİÏX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú\ØÛÜ™IÊKX\™XKœ]Y\TÙ[XİÜŠ	ÈØØ]Ú[]™\ÉÊNÚYŠÊ\Ë^ÛÛ[IÔØÛÜ™Nˆ	ÊØØ]ÚØÛÜ™JÉÈÈ	ÎÚYŠ
+[^ÛÛ[IÓ]™\Îˆ	ÊÓX]›X^
+]™\ÊNÚYŠØ]ÚØÛÜ™ON
+^ÜİÜØ]Ú
+
+NØXÚY]™J	ØØ]Ú	ÊNÜÜXZÊ	Ôİ\\ˆØ]Ú\‰ÊNØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\”İ\\ˆØ]Ú\ˆOÙ]´$´`t-H4/ô`4-t-4/4-t`´bÈ4/ô/´.t/4,4/tbËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
+
+H”^HYØZ[Ø]Û‰ßY[ÙHYŠ]™\ÏL
+^ÜİÜØ]Ú
+
+NØ\™XKš[›™\’SIÏ]ˆÛ\ÜÏHœ›Û\‘ÛÛÙHOÙ]´'ô/´/ô`4/´,t`ô.H4-tbtdH4`4,4-ËÜ]ÛˆÛ\ÜÏHœ^HˆÛ˜ÛXÚÏHœİ\Ø]Ú
+
+H”^HYØZ[Ø]Û‰ß_Bˆ[˜İ[Ûˆ˜]ÓX^™J
+^Ø\™XKš[›™\’SXÛ\ÜÏH™Ø[YK[›İH´'ô-t`4`t/´/t,4-´.4`t`´/´cô`ˆ4,ˆ4/´`´-4-t.ôc4/tbôaH4`´`ô/ô.4.´,4aH4.4/t-H4/ô-t`4-t.´`4bô,´,4c´`ˆ4-4/´`4/´,ô`ËÜ]ÛˆÛ\ÜÏH›X^™K]\ÚÈˆYH›X^™K[\İ[ˆ‰ˆÌLÈš[™H	ÛX^™UØ[YOØ]Û]ˆÛ\ÜÏH™Ø[YKX˜\ˆÜ[ˆÛ\ÜÏHœ[´(4,4`ô/t-ˆ	ÛX^™T›İ[™HÈÜÜ[Ü[ˆÛ\ÜÏHœ[´)t/´-4bÎˆ	ÛX^™S[İ™\ßOÜÜ[Ù]]ˆÛ\ÜÏH›X^™HÙ]]ˆÛ\ÜÏH˜ÛÛ›ÛÈ]ÛˆÛ\ÜÏH˜\œ›İÈ\ˆ]KY\H\‰X\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈYˆ]KY\H›Y‰›\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈİÛˆˆ]KY\H™İÛˆ‰™\œÏØ]Û]ÛˆÛ\ÜÏH˜\œ›İÈšYÚˆ]KY\HœšYÚ‰œ˜\œÏØ]ÛÙ]˜Ø\™XKœ]Y\TÙ[XİÜŠ	ÈÛX^™K[\İ[‰ÊK›Û˜ÛXÚÏJ
+OOœÜXZÊ	Ñš[™H	ÊÛX^™UØ[Y
+NØÛÛœİOX\™XKœ]Y\TÙ[XİÜŠ	Ë›X^™IÊNÙ›ÜŠ]LÜNÜŠÊÊY›ÜŠ]ÏLØÏNØÊÊÊ^ØÛÛœİÙ[YØİ[Y[˜Ü™X]Q[[Y[
+	Ù]‰ÊK][O[X^™P[š[X[ÓÛ›Ø\™™š[™
+OœÜÖÌOOO\‰‰œÜÖÌWOOOXÊNØÙ[˜Û\ÜÓ˜[YOIÛX^™KXÙ[	ÊÊX^™SX\š[˜[Ü—VØ×OOOIÌIÏÉÈØ[	Î‰ÉÊJÊ][OÉÈ\™Ù]	Î‰ÉÊJÊ][OË˜[š[X[›˜[YOOO[X^™UØ[YÉÈÛØ[	Î‰ÉÊJÊOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÏÉÈ\›ÉÎ‰ÉÊNÚYŠ][JXÙ[^ÛÛ[Z][K˜[š[X[œŞ[X›ÛÚYŠOOZ\›Ëœ‰‰˜ÏOOZ\›Ë˜ÊXÙ[š[›™\’SIÉˆÌLMMÎÉÎÛK˜\[™
+Ù[
+_X\™XKœ]Y\TÙ[XİÜ[
+	ÖÙ]KY\—IÊK™›Ü‘XXÚ
+O˜‹›Û˜ÛXÚÏJ
+OO›[İ™R\›Ê‹™]\Ù]™\ŠJ_Bˆ™Yœ™\Ú˜Z[
+
+NÂˆÜØÜš\‚Ø›ÙO‚Ú[‚
